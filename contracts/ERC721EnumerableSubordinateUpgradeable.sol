@@ -42,25 +42,25 @@ abstract contract ERC721EnumerableSubordinateUpgradeable is
 
   // core views
 
-  function balanceOf(address owner) public view override returns (uint256) {
+  function balanceOf(address owner) public view override(IERC721Upgradeable, ERC721Upgradeable) returns (uint256) {
     return _main.balanceOf(owner);
   }
 
-  function ownerOf(uint256 tokenId) public view override returns (address) {
+  function ownerOf(uint256 tokenId) public view override(IERC721Upgradeable, ERC721Upgradeable) returns (address) {
     return _main.ownerOf(tokenId);
   }
 
   // enumerable
 
-  function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override returns (uint256) {
+  function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override(ERC721EnumerableUpgradeable) returns (uint256) {
     return _main.tokenOfOwnerByIndex(owner, index);
   }
 
-  function totalSupply() public view virtual override returns (uint256) {
+  function totalSupply() public view virtual override(ERC721EnumerableUpgradeable) returns (uint256) {
     return _main.totalSupply();
   }
 
-  function tokenByIndex(uint256 index) public view virtual override returns (uint256) {
+  function tokenByIndex(uint256 index) public view virtual override(ERC721EnumerableUpgradeable) returns (uint256) {
     return _main.tokenByIndex(index);
   }
 
@@ -86,19 +86,19 @@ abstract contract ERC721EnumerableSubordinateUpgradeable is
     return super.supportsInterface(interfaceId);
   }
 
-  function approve(address, uint256) public override(ERC721Upgradeable) {
+  function approve(address, uint256) public override(IERC721Upgradeable, ERC721Upgradeable) {
     revert SubordinateTokensAreNotTransferable();
   }
 
-  function getApproved(uint256) public view override(ERC721Upgradeable) returns (address) {
+  function getApproved(uint256) public view override(IERC721Upgradeable, ERC721Upgradeable) returns (address) {
     return address(0);
   }
 
-  function setApprovalForAll(address, bool) public override(ERC721Upgradeable) {
+  function setApprovalForAll(address, bool) public override(IERC721Upgradeable, ERC721Upgradeable) {
     revert SubordinateTokensAreNotTransferable();
   }
 
-  function isApprovedForAll(address, address) public view override(ERC721Upgradeable) returns (bool) {
+  function isApprovedForAll(address, address) public view override(IERC721Upgradeable, ERC721Upgradeable) returns (bool) {
     return false;
   }
 

@@ -35,6 +35,8 @@ contract MySubordinate is ERC721Subordinate {
 }
 ```
 
+**Version 0.0.2 was not working with Solidity 0.8.17. Version 0.0.3 fixes the issue, but now it won't work with many previous version of Solidity. So, user ^0.8.17.** 
+
 ## Warnings
 
 The contract produces a lot of warnings during the compilation because there are part of the extended contract which are not reachable, views that could become pure but that would change the standard interface, etc. 
@@ -56,6 +58,9 @@ What makes the difference is the base token uri. Change that, and everything wil
 Feel free to make a PR to add your contracts.
 
 ## History
+
+**0.0.3**
+- make it work with Solidity 0.8.17, BREAKING previous support
 
 **0.0.2**
 - adding repo info to package.json
