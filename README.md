@@ -57,6 +57,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.0.2**
+- adding repo info to package.json
+
 **0.0.1**
 - first version
 
