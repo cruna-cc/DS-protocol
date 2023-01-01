@@ -22,7 +22,12 @@ abstract contract ERC721EnumerableSubordinateUpgradeable is
 
   ERC721EnumerableUpgradeable private _main;
 
-  function __ERC721SubordinateUpgradeable_init(string memory name_, string memory symbol_, address main_) internal onlyInitializing {
+  // solhint-disable
+  function __ERC721SubordinateUpgradeable_init(
+    string memory name_,
+    string memory symbol_,
+    address main_
+  ) internal onlyInitializing {
     if (!main_.isContract()) revert NotAContract();
     _main = ERC721EnumerableUpgradeable(main_);
     __ERC721_init(name_, symbol_);
@@ -58,7 +63,12 @@ abstract contract ERC721EnumerableSubordinateUpgradeable is
 
   // no approvals
 
-  function supportsInterface(bytes4 interfaceId) public view override(ERC721Upgradeable, ERC721EnumerableUpgradeable) returns (bool) {
+  function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
+    returns (bool)
+  {
     return super.supportsInterface(interfaceId);
   }
 

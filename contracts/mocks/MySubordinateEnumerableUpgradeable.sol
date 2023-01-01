@@ -4,7 +4,6 @@ pragma solidity ^0.8.9;
 import "../ERC721EnumerableSubordinateUpgradeable.sol";
 
 contract MySubordinateEnumerableUpgradeable is ERC721EnumerableSubordinateUpgradeable {
-
   /// @custom:oz-upgrades-unsafe-allow constructor
   constructor() initializer {}
 
