@@ -29,11 +29,11 @@ contract ERC721Subordinate is ERC721 {
 
   // core views
 
-  function balanceOf(address owner) public view override returns (uint256) {
+  function balanceOf(address owner) public view override(ERC721) returns (uint256) {
     return _main.balanceOf(owner);
   }
 
-  function ownerOf(uint256 tokenId) public view override returns (address) {
+  function ownerOf(uint256 tokenId) public view override(ERC721) returns (address) {
     return _main.ownerOf(tokenId);
   }
 
