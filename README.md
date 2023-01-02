@@ -59,6 +59,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.0.4**
+- renamed init functions. Ex: `__ERC721SubordinateUpgradeable_init` >> `__ERC721Subordinate_init`
+
 **0.0.3**
 - make it work with Solidity 0.8.17, BREAKING previous support
 

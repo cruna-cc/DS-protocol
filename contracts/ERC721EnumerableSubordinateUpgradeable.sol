@@ -23,7 +23,7 @@ abstract contract ERC721EnumerableSubordinateUpgradeable is
   ERC721EnumerableUpgradeable private _main;
 
   // solhint-disable
-  function __ERC721EnumerableSubordinateUpgradeable_init(
+  function __ERC721EnumerableSubordinate_init(
     string memory name_,
     string memory symbol_,
     address main_
