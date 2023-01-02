@@ -55,6 +55,8 @@ What makes the difference is the base token uri. Change that, and everything wil
 
 ## Implementations
 
+[Everdragons2PGP](https://github.com/ndujaLabs/everdragons2-core/blob/version4-pfp/contracts/Everdragons2PFP.sol)
+
 Feel free to make a PR to add your contracts.
 
 ## History
