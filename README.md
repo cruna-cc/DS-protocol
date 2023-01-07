@@ -3,7 +3,7 @@ An NFT which is subordinate to a primary NFT
 
 ## Why
 
-In 2021, when we started Everdragons2, we had in mind of using the head of the dragons for a PFP token based on the Everdragons2 that you own. Here an example of a full dragon and just the head. 
+In 2021, when we started Everdragons2, we had in mind of using the head of the dragons for a PFP token based on the Everdragons2 that you own. Here an example of a full dragon and just the head.
 
 ![Dragon](https://github.com/ndujaLabs/ERC721Subordinate/blob/main/assets/Soolhoth.png)
 
@@ -11,7 +11,7 @@ In 2021, when we started Everdragons2, we had in mind of using the head of the d
 
 The question was, _Should we allow people to transfer the PFP separately from the primary NFT?_ It didn't make much sense. At the same time, how to avoid that?
 
-ERC721Subordinate is the response. 
+ERC721Subordinate is the response.
 
 ## The interface
 
@@ -52,7 +52,7 @@ interface IERC721Subordinate {
 
 ## How to use it
 
-Install the dependencies 
+Install the dependencies
 ``` 
 npm i @openzeppelin/contracts \
  @openzeppelin/contracts-upgradeable \
@@ -72,11 +72,11 @@ contract MySubordinate is ERC721Subordinate {
 }
 ```
 
-**Version 0.0.2 was not working with Solidity 0.8.17. Version 0.0.3 fixes the issue, but now it won't work with many previous version of Solidity. So, user ^0.8.17.** 
+**Version 0.0.2 was not working with Solidity 0.8.17. Version 0.0.3 fixed the issue, but now it may not work with previous version of Solidity**
 
 ## Warnings
 
-The contract produces a lot of warnings during the compilation because there are part of the extended contract which are not reachable, views that could become pure but that would change the standard interface, etc. 
+The contract produces a lot of warnings during the compilation because there are part of the extended contract which are not reachable, views that could become pure but that would change the standard interface, etc.
 
 A way to solve it is to take the original contracts by OpenZeppelin and put them into this repo, but that it is hard to maintain and potentially unsafe.
 
