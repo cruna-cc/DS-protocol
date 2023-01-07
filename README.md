@@ -72,8 +72,6 @@ contract MySubordinate is ERC721Subordinate {
 }
 ```
 
-**Version 0.0.2 was not working with Solidity 0.8.17. Version 0.0.3 fixed the issue, but now it may not work with previous version of Solidity**
-
 ## Warnings
 
 The contract produces a lot of warnings during the compilation because there are part of the extended contract which are not reachable, views that could become pure but that would change the standard interface, etc.
