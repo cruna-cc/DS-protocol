@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-
 import "../ERC721EnumerableSubordinateUpgradeable.sol";
 
-contract MySubordinateEnumerableUpgradeable is ERC721EnumerableSubordinateUpgradeable, UUPSUpgradeable {
+contract MySubordinateEnumerableUpgradeable is ERC721EnumerableSubordinateUpgradeable {
   /// @custom:oz-upgrades-unsafe-allow constructor
   constructor() initializer {}
 

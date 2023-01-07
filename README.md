@@ -61,6 +61,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.1.0**
+- code refactored to override the implementation of OpenZeppelin's ERC721 and ERC721Enumerable to remove all the warning due to unreachable code
+
 **0.0.4**
 - renamed init functions. Ex: `__ERC721SubordinateUpgradeable_init` >> `__ERC721Subordinate_init`
 

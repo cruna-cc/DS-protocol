@@ -3,103 +3,57 @@ pragma solidity ^0.8.9;
 
 // Authors: Francesco Sullo <francesco@sullo.co>
 
-import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721EnumerableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+
+import "./ERC721SubordinateUpgradeable.sol";
+
+interface IERC721EnumerableExtended is IERC165Upgradeable, IERC721Upgradeable, IERC721MetadataUpgradeable, IERC721EnumerableUpgradeable {}
 
 abstract contract ERC721EnumerableSubordinateUpgradeable is
-  Initializable,
-  ERC721Upgradeable,
-  ERC721EnumerableUpgradeable,
-  UUPSUpgradeable
-{
-  using AddressUpgradeable for address;
+Initializable, ERC721SubordinateUpgradeable, IERC721EnumerableUpgradeable {
 
-  error NotAContract();
-  error SubordinateTokensAreNotTransferable();
-
-  ERC721EnumerableUpgradeable private _main;
+  // address of the dominant token contract
+  IERC721EnumerableExtended private _dominantEnumerable;
 
   // solhint-disable
   function __ERC721EnumerableSubordinate_init(
     string memory name_,
     string memory symbol_,
-    address main_
+    address dominant_
   ) internal onlyInitializing {
-    if (!main_.isContract()) revert NotAContract();
-    _main = ERC721EnumerableUpgradeable(main_);
-    __ERC721_init(name_, symbol_);
+    __ERC721Subordinate_init(name_, symbol_, dominant_);
+    _dominantEnumerable = IERC721EnumerableExtended(dominant_);
+    require(_dominantEnumerable.supportsInterface(type(IERC721EnumerableUpgradeable).interfaceId), "ERC721Subordinate: dominant not IERC721Enumerable");
   }
 
-  // ATTENTION, YOU MUST IMPLEMENT
-  // function _authorizeUpgrade(address newImplementation) internal virtual onlyOwner override {}
-
-  function mainToken() public view returns (address) {
-    return address(_main);
+  /**
+   * @dev See {IERC165-supportsInterface}.
+   */
+  function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165Upgradeable, ERC721SubordinateUpgradeable) returns (bool) {
+    return interfaceId == type(IERC721EnumerableUpgradeable).interfaceId || super.supportsInterface(interfaceId);
   }
 
-  // core views
-
-  function balanceOf(address owner) public view override(IERC721Upgradeable, ERC721Upgradeable) returns (uint256) {
-    return _main.balanceOf(owner);
+  /**
+   * @dev See {IERC721Enumerable-tokenOfOwnerByIndex}.
+   */
+  function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override returns (uint256) {
+    return _dominantEnumerable.tokenOfOwnerByIndex(owner, index);
   }
 
-  function ownerOf(uint256 tokenId) public view override(IERC721Upgradeable, ERC721Upgradeable) returns (address) {
-    return _main.ownerOf(tokenId);
+  /**
+   * @dev See {IERC721Enumerable-totalSupply}.
+   */
+  function totalSupply() public view virtual override returns (uint256) {
+    return _dominantEnumerable.totalSupply();
   }
 
-  // enumerable
-
-  function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override(ERC721EnumerableUpgradeable) returns (uint256) {
-    return _main.tokenOfOwnerByIndex(owner, index);
-  }
-
-  function totalSupply() public view virtual override(ERC721EnumerableUpgradeable) returns (uint256) {
-    return _main.totalSupply();
-  }
-
-  function tokenByIndex(uint256 index) public view virtual override(ERC721EnumerableUpgradeable) returns (uint256) {
-    return _main.tokenByIndex(index);
-  }
-
-  // no transfers 2
-
-  function _beforeTokenTransfer(
-    address,
-    address,
-    uint256,
-    uint256
-  ) internal override(ERC721Upgradeable, ERC721EnumerableUpgradeable) {
-    revert SubordinateTokensAreNotTransferable();
-  }
-
-  // no approvals
-
-  function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
-    returns (bool)
-  {
-    return super.supportsInterface(interfaceId);
-  }
-
-  function approve(address, uint256) public override(IERC721Upgradeable, ERC721Upgradeable) {
-    revert SubordinateTokensAreNotTransferable();
-  }
-
-  function getApproved(uint256) public view override(IERC721Upgradeable, ERC721Upgradeable) returns (address) {
-    return address(0);
-  }
-
-  function setApprovalForAll(address, bool) public override(IERC721Upgradeable, ERC721Upgradeable) {
-    revert SubordinateTokensAreNotTransferable();
-  }
-
-  function isApprovedForAll(address, address) public view override(IERC721Upgradeable, ERC721Upgradeable) returns (bool) {
-    return false;
+  /**
+   * @dev See {IERC721Enumerable-tokenByIndex}.
+   */
+  function tokenByIndex(uint256 index) public view virtual override returns (uint256) {
+    return _dominantEnumerable.tokenByIndex(index);
   }
 
   uint256[50] private __gap;
