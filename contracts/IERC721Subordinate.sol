@@ -2,6 +2,8 @@
 pragma solidity ^0.8.9;
 
 // Authors: Francesco Sullo <francesco@sullo.co>
+
+// ERC165 interface id is 0x60c8f291
 interface IERC721Subordinate {
 
   // A subordinate contract has no control on its own ownership.

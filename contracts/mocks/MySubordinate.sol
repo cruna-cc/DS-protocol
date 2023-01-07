@@ -6,7 +6,7 @@ import "../ERC721Subordinate.sol";
 contract MySubordinate is ERC721Subordinate {
   constructor(address myToken) ERC721Subordinate("MyToken", "MTK", myToken) {}
 
-  function getInterfaceId() public pure override returns (bytes4) {
+  function getInterfaceId() public pure returns (bytes4) {
     return type(IERC721Subordinate).interfaceId;
   }
 }
