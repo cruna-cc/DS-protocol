@@ -54,6 +54,8 @@ describe("Subordinate", function () {
     expect(await myToken.balanceOf(holder2.address)).equal(1)
     expect(await subordinate.balanceOf(holder2.address)).equal(1)
 
+    expect(await subordinate.getInterfaceId()).equal("0x60c8f291")
+
   });
 
   it("should verify the flow for ERC721EnumerableSubordinateUpgradeable", async function () {
