@@ -35,7 +35,7 @@ interface IERC721Subordinate {
   // - A token that represent an asset of the dominant token.
   // - A token that adds missed features to the dominant token.
 
-  // The function dominantToken() returns the address of the main token.
+  // The function dominantToken() returns the address of the dominant token.
   function dominantToken() external view returns (address);
 
   // The dominant token has full control on the subordinate token.

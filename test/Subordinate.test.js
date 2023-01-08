@@ -91,6 +91,7 @@ describe("Subordinate", function () {
     expect(await myTokenEnumerable.balanceOf(holder2.address)).equal(1)
     expect(await subordinateEnumerableUpgradeable.balanceOf(holder2.address)).equal(1)
 
+    expect(await subordinateEnumerableUpgradeable.getInterfaceId()).equal("0x60c8f291")
   });
 
 });

@@ -14,4 +14,8 @@ contract MySubordinateEnumerableUpgradeable is ERC721EnumerableSubordinateUpgrad
   }
 
   function _authorizeUpgrade(address newImplementation) internal virtual override {}
+
+  function getInterfaceId() public pure returns (bytes4) {
+    return type(IERC721SubordinateUpgradeable).interfaceId;
+  }
 }
