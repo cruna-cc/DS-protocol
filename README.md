@@ -11,7 +11,7 @@ In 2021, when we started Everdragons2, we had in mind of using the head of the d
 
 The question was, _Should we allow people to transfer the PFP separately from the primary NFT?_ It didn't make much sense. At the same time, how to avoid that?
 
-ERC721Subordinate is the response.
+ERC721Subordinate introduces subordinate token that are owned by whoever owns the dominant token. In consequence of this, the subordinate token cannot be approved or transferred separately from the dominant token. It is transferred when the dominant token is transferred.
 
 ## The interface
 
@@ -77,6 +77,14 @@ contract MySubordinate is ERC721Subordinate {
 You initialize the subordinate token passing the address of the main token and the subordinate takes anything from that. Look at some example in mocks and the testing.
 
 What makes the difference is the base token uri. Change that, and everything will work great.
+
+## Similar proposal
+
+There are similar proposal that moves in the same realm.
+
+[EIP-6150: Hierarchical NFTs](https://github.com/ethereum/EIPs/blob/ad986045e87d1e659bf36541df6fc13315c59bd7/EIPS/eip-6150.md) (discussion at https://ethereum-magicians.org/t/eip-6150-hierarchical-nfts-an-extension-to-erc-721/12173) is a proposal for a new standard for non-fungible tokens (NFTs) on the Ethereum blockchain that would allow NFTs to have a hierarchical structure, similar to a filesystem. This would allow for the creation of complex structures, such as NFTs that contain other NFTs, or NFTs that represent collections of other NFTs. The proposal is currently in the discussion phase, and has not yet been implemented on the Ethereum network. ERC721Subordinate focuses instead on a simpler scenario, trying to solve a specific problem in the simplest possible way.
+
+
 
 ## Implementations
 
