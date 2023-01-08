@@ -72,16 +72,6 @@ contract MySubordinate is ERC721Subordinate {
 }
 ```
 
-## Warnings
-
-The contract produces a lot of warnings during the compilation because there are part of the extended contract which are not reachable, views that could become pure but that would change the standard interface, etc.
-
-A way to solve it is to take the original contracts by OpenZeppelin and put them into this repo, but that it is hard to maintain and potentially unsafe.
-
-If you have a good idea to how to solve the issue feel free to submit a pull request.
-
-For now, I believe that the warnings can be safely ignored.
-
 ## How it works
 
 You initialize the subordinate token passing the address of the main token and the subordinate takes anything from that. Look at some example in mocks and the testing.
@@ -90,7 +80,7 @@ What makes the difference is the base token uri. Change that, and everything wil
 
 ## Implementations
 
-[Everdragons2PGP](https://github.com/ndujaLabs/everdragons2-core/blob/version4-pfp/contracts/Everdragons2PFP.sol)
+[Everdragons2PGP](https://github.com/ndujaLabs/everdragons2-core/blob/VP/contracts/Everdragons2PFP.sol)
 
 Feel free to make a PR to add your contracts.
 
