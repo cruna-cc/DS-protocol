@@ -314,6 +314,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.1.2**
+- remove script for deployment, left from the template used to create the repo
+
 **0.1.1**
 - specify that _dominant is immutable, where possible
 
