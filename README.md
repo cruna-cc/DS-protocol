@@ -1,5 +1,5 @@
 # ERC721Subordinate
-An NFT which is subordinate to a primary NFT
+A subordinate ERC721 contract is a type of non-fungible token (NFT) that follows the ownership of a dominant NFT, which can be an ERC721 contract that does not have any additional features.
 
 ## Why
 
