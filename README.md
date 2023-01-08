@@ -84,7 +84,7 @@ contract ERC721Subordinate is IERC721Subordinate, Context, ERC165, IERC721, IERC
   using Strings for uint256;
 
   // dominant token contract
-  IERC721Extended private _dominant;
+  IERC721Extended immutable private _dominant;
 
   // Token name
   string private _name;
@@ -313,6 +313,9 @@ EIP-3652 (https://ethereum-magicians.org/t/eip-3652-hierarchical-nft/6963) is ve
 Feel free to make a PR to add your contracts.
 
 ## History
+
+**0.1.1**
+- specify that _dominant is immutable, where possible
 
 **0.1.0**
 - code refactored to override the implementation of OpenZeppelin's ERC721 and ERC721Enumerable to remove all the warning due to unreachable code

@@ -17,7 +17,7 @@ interface IERC721EnumerableExtended is IERC165, IERC721, IERC721Metadata, IERC72
 contract ERC721SubordinateEnumerable is ERC721Subordinate, IERC721Enumerable {
 
   // address of the dominant token contract
-  IERC721EnumerableExtended private _dominantEnumerable;
+  IERC721EnumerableExtended immutable private _dominantEnumerable;
 
   /**
  * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection

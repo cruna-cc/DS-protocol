@@ -25,7 +25,7 @@ contract ERC721Subordinate is IERC721Subordinate, Context, ERC165, IERC721, IERC
   using Strings for uint256;
 
   // dominant token contract
-  IERC721Extended private _dominant;
+  IERC721Extended immutable private _dominant;
 
   // Token name
   string private _name;
