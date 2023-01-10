@@ -63,10 +63,8 @@ pragma solidity ^0.8.9;
 // Authors: Francesco Sullo <francesco@sullo.co>
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
-import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
@@ -79,7 +77,7 @@ interface IERC721Extended is IERC165, IERC721, IERC721Metadata {}
  * Strictly based on OpenZeppelin's implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721]
  * in openzeppelin/contracts v4.8.0.
  */
-contract ERC721Subordinate is IERC721Subordinate, Context, ERC165, IERC721, IERC721Metadata {
+contract ERC721Subordinate is IERC721Subordinate, ERC165, IERC721, IERC721Metadata {
   using Address for address;
   using Strings for uint256;
 
@@ -313,6 +311,9 @@ EIP-3652 (https://ethereum-magicians.org/t/eip-3652-hierarchical-nft/6963) is ve
 Feel free to make a PR to add your contracts.
 
 ## History
+
+**0.1.3**
+- remove unused dependencies (Context, ERC721Receiver)
 
 **0.1.2**
 - remove script for deployment, left from the template used to create the repo

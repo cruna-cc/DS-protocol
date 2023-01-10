@@ -3,10 +3,8 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
@@ -24,7 +22,6 @@ interface IERC721Extended is IERC165Upgradeable, IERC721Upgradeable, IERC721Meta
 contract ERC721SubordinateUpgradeable is
 IERC721SubordinateUpgradeable,
 Initializable,
-ContextUpgradeable,
 ERC165Upgradeable,
 IERC721Upgradeable,
 IERC721MetadataUpgradeable
@@ -47,7 +44,6 @@ IERC721MetadataUpgradeable
    */
   // solhint-disable
   function __ERC721Subordinate_init(string memory name_, string memory symbol_, address dominant_) internal initializer {
-    __Context_init_unchained();
     __ERC165_init_unchained();
     _name = name_;
     _symbol = symbol_;
