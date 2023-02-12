@@ -11,6 +11,7 @@ contract MySubordinateEnumerableUpgradeable is ERC721EnumerableSubordinateUpgrad
 
   function initialize(address myTokenEnumerableUpgradeable) public initializer {
     __ERC721EnumerableSubordinate_init("SuperToken", "SPT", myTokenEnumerableUpgradeable);
+    __UUPSUpgradeable_init();
   }
 
   function _authorizeUpgrade(address newImplementation) internal virtual override {}
