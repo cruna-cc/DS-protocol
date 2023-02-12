@@ -312,7 +312,7 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
-**0.1.4**
+**0.1.4** — _version not published_
 - fix error in mock, not initializing UUPSUpgradeable
 
 **0.1.3**
