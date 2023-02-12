@@ -10,7 +10,7 @@ contract MySubordinateEnumerableUpgradeable is ERC721EnumerableSubordinateUpgrad
   constructor() initializer {}
 
   function initialize(address myTokenEnumerableUpgradeable) public initializer {
-    __ERC721EnumerableSubordinate_init("SuperToken", "SPT", myTokenEnumerableUpgradeable);
+    __ERC721EnumerableSubordinate_init("My Subordinate", "mSUBu", myTokenEnumerableUpgradeable);
     __UUPSUpgradeable_init();
   }
 
