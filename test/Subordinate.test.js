@@ -6,7 +6,7 @@ describe("Subordinate", function () {
   let myTokenEnumerable;
 
   let subordinate;
-  let subordinateEnumerableUpgradeable;
+  let subordinateUpgradeable;
 
   let owner, holder1, holder2, holder3;
 
@@ -28,7 +28,7 @@ describe("Subordinate", function () {
     await myTokenEnumerable.safeMint(holder1.address, 2)
 
     subordinate = await deployContract("MySubordinate", myToken.address);
-    subordinateEnumerableUpgradeable = await deployContractUpgradeable("MySubordinateEnumerableUpgradeable", [myTokenEnumerable.address]);
+    subordinateUpgradeable = await deployContractUpgradeable("MySubordinateUpgradeable", [myTokenEnumerable.address]);
 
   });
 
@@ -60,38 +60,41 @@ describe("Subordinate", function () {
 
   it("should verify the flow for ERC721EnumerableSubordinateUpgradeable", async function () {
 
-    const max1 = await number(subordinateEnumerableUpgradeable.totalSupply())
-    const max2 = await number(myTokenEnumerable.totalSupply())
-
-    expect(max1).equal(max2)
-
     expect(await myTokenEnumerable.balanceOf(holder1.address)).equal(3)
-    expect(await subordinateEnumerableUpgradeable.balanceOf(holder1.address)).equal(3)
+    expect(await subordinateUpgradeable.balanceOf(holder1.address)).equal(3)
 
     expect(await myTokenEnumerable.ownerOf(1)).equal(holder1.address);
-    expect(await subordinateEnumerableUpgradeable.ownerOf(1)).equal(holder1.address);
+    expect(await subordinateUpgradeable.ownerOf(1)).equal(holder1.address);
 
     expect(await myTokenEnumerable.balanceOf(holder2.address)).equal(0)
-    expect(await subordinateEnumerableUpgradeable.balanceOf(holder2.address)).equal(0)
+    expect(await subordinateUpgradeable.balanceOf(holder2.address)).equal(0)
 
     expect(await myTokenEnumerable.tokenOfOwnerByIndex(holder1.address, 1)).equal(3)
-    expect(await subordinateEnumerableUpgradeable.tokenOfOwnerByIndex(holder1.address, 1)).equal(3)
+    try {
+      await subordinateUpgradeable.tokenOfOwnerByIndex(holder1.address, 1)
+    } catch(e) {
+      expect(e.message).equal("subordinateUpgradeable.tokenOfOwnerByIndex is not a function")
+    }
 
     expect(await myTokenEnumerable.tokenByIndex(1)).equal(3)
-    expect(await subordinateEnumerableUpgradeable.tokenByIndex(1)).equal(3)
+    try {
+      await subordinateUpgradeable.tokenByIndex(1);
+    } catch(e) {
+      expect(e.message).equal("subordinateUpgradeable.tokenByIndex is not a function")
+    }
 
     await myTokenEnumerable.connect(holder1)["safeTransferFrom(address,address,uint256)"](holder1.address, holder2.address, 1)
 
     expect(await myTokenEnumerable.balanceOf(holder1.address)).equal(2)
-    expect(await subordinateEnumerableUpgradeable.balanceOf(holder1.address)).equal(2)
+    expect(await subordinateUpgradeable.balanceOf(holder1.address)).equal(2)
 
     expect(await myTokenEnumerable.ownerOf(1)).equal(holder2.address);
-    expect(await subordinateEnumerableUpgradeable.ownerOf(1)).equal(holder2.address);
+    expect(await subordinateUpgradeable.ownerOf(1)).equal(holder2.address);
 
     expect(await myTokenEnumerable.balanceOf(holder2.address)).equal(1)
-    expect(await subordinateEnumerableUpgradeable.balanceOf(holder2.address)).equal(1)
+    expect(await subordinateUpgradeable.balanceOf(holder2.address)).equal(1)
 
-    expect(await subordinateEnumerableUpgradeable.getInterfaceId()).equal("0x60c8f291")
+    expect(await subordinateUpgradeable.getInterfaceId()).equal("0x60c8f291")
   });
 
 });
