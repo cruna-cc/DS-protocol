@@ -307,7 +307,7 @@ EIP-3652 (https://ethereum-magicians.org/t/eip-3652-hierarchical-nft/6963) is ve
 
 ## Implementations
 
-[Everdragons2PGP](https://github.com/ndujaLabs/everdragons2-core/blob/VP/contracts/Everdragons2PFP.sol)
+[Everdragons2PFP](https://github.com/ndujaLabs/everdragons2-core/blob/VP/contracts/Everdragons2PFP.sol)
 
 Feel free to make a PR to add your contracts.
 
