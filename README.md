@@ -263,7 +263,7 @@ contract MySubordinate is ERC721Subordinate {
 }
 ```
 
-Another example, enumerable and upgradeable
+Another example, upgradeable
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -271,9 +271,9 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-import "../ERC721EnumerableSubordinateUpgradeable.sol";
+import "../ERC721SubordinateUpgradeable.sol";
 
-contract MySubordinateEnumerableUpgradeable is ERC721EnumerableSubordinateUpgradeable, UUPSUpgradeable {
+contract MySubordinateUpgradeable is ERC721SubordinateUpgradeable, UUPSUpgradeable {
   /// @custom:oz-upgrades-unsafe-allow constructor
   constructor() initializer {}
 
@@ -289,6 +289,7 @@ contract MySubordinateEnumerableUpgradeable is ERC721EnumerableSubordinateUpgrad
 }
 
 ```
+Notice that there is no reason to make the subordinate enumerable because we can query the dominant token to get all the ID owned by someone and apply that to the subordinate.
 
 ## How it works
 
