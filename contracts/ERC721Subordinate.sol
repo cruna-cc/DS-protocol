@@ -6,7 +6,7 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+//import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
 import "./IERC721Subordinate.sol";
 import "./ERC721Badge.sol";
@@ -16,7 +16,7 @@ import "./ERC721Badge.sol";
  * Strictly based on OpenZeppelin's implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721]
  * in openzeppelin/contracts v4.8.0.
  */
-contract ERC721Subordinate is IERC721Subordinate, ERC165, ERC721Badge {
+contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
   using Address for address;
   using Strings for uint256;
 
@@ -46,7 +46,7 @@ contract ERC721Subordinate is IERC721Subordinate, ERC165, ERC721Badge {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, ERC721Badge) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Badge) returns (bool) {
     return
       interfaceId == type(IERC721Subordinate).interfaceId ||
       super.supportsInterface(interfaceId);
