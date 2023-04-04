@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: CC0-1.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 // erc165 interfaceId 0xb45a3c0e
 interface IERC721DefaultLockable {
