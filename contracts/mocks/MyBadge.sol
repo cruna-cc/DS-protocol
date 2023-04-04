@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.9;
+
+import "../ERC721Badge.sol";
+import "../ERC721BadgeUpgradeable.sol";
+
+contract MyBadge is ERC721Badge {
+  constructor() ERC721Badge("MY Badge", "mBDG") {}
+
+  function safeMint(address to, uint256 tokenId) public {
+    _safeMint(to, tokenId);
+  }
+
+}

@@ -312,6 +312,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.3.0**
+- adding an ERC721Badge which is extended by the subordinate
+
 **0.2.0**
 - remove the enumerable version because it is useless in the subordinates
 
