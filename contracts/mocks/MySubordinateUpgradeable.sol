@@ -7,7 +7,9 @@ import "../ERC721SubordinateUpgradeable.sol";
 
 contract MySubordinateUpgradeable is ERC721SubordinateUpgradeable, UUPSUpgradeable {
   /// @custom:oz-upgrades-unsafe-allow constructor
-  constructor() initializer {}
+  constructor() {
+    _disableInitializers();
+  }
 
   function initialize(address myTokenEnumerableUpgradeable) public initializer {
     __ERC721Subordinate_init("My Subordinate", "mSUBu", myTokenEnumerableUpgradeable);
