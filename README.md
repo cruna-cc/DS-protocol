@@ -348,6 +348,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.4.0**
+- change the pragma of an interface that was mistakenly set to 0.8.17. Now all of them are ^0.8.9 for consistency
+
 **0.3.0**
 - adding an ERC721Badge which is extended by the subordinate. BE CAREFUL, the change can break previous implementations
 
