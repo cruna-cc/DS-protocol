@@ -239,7 +239,7 @@ contract ERC721Subordinate is IERC721Subordinate, ERC165, IERC721, IERC721Metada
 }
 ```
 
-The repo includes subordinates of enumerable and the relative upgradeable versions. 
+The repo includes also an upgradeable version. 
 
 ## How to use it
 
