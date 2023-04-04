@@ -348,6 +348,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.4.1**
+- remove the useless explicit dependency from ERC165
+
 **0.4.0**
 - change the pragma of an interface that was mistakenly set to 0.8.17. Now all of them are ^0.8.9 for consistency
 
