@@ -3,7 +3,7 @@ pragma solidity ^0.8.17;
 
 // Author: Francesco Sullo <francesco@sullo.co>
 
-// erc165 interfaceId 0xbfdf8f79
+// erc165 interfaceId 0x2281ffc3
 interface IERC721DefaultApprovable {
   // Must be emitted when the contract is deployed.
   event DefaultApprovable(bool approvable);

@@ -63,26 +63,24 @@ pragma solidity ^0.8.9;
 // Authors: Francesco Sullo <francesco@sullo.co>
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
 import "./IERC721Subordinate.sol";
-
-interface IERC721Extended is IERC165, IERC721, IERC721Metadata {}
+import "./ERC721Badge.sol";
 
 /**
  * @dev Implementation of IERC721Subordinate interface.
  * Strictly based on OpenZeppelin's implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721]
  * in openzeppelin/contracts v4.8.0.
  */
-contract ERC721Subordinate is IERC721Subordinate, ERC165, IERC721, IERC721Metadata {
+contract ERC721Subordinate is IERC721Subordinate, ERC165, ERC721Badge {
   using Address for address;
   using Strings for uint256;
 
   // dominant token contract
-  IERC721Extended immutable private _dominant;
+  IERC721 immutable private _dominant;
 
   // Token name
   string private _name;
@@ -98,22 +96,18 @@ contract ERC721Subordinate is IERC721Subordinate, ERC165, IERC721, IERC721Metada
     string memory name_,
     string memory symbol_,
     address dominant_
-  ) {
-    _name = name_;
-    _symbol = symbol_;
+  ) ERC721Badge(name_, symbol_) {
     require(dominant_.isContract(), "ERC721Subordinate: not a contract");
-    _dominant = IERC721Extended(dominant_);
+    _dominant = IERC721(dominant_);
     require(_dominant.supportsInterface(type(IERC721).interfaceId), "ERC721Subordinate: dominant not IERC721");
   }
 
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, ERC721Badge) returns (bool) {
     return
       interfaceId == type(IERC721Subordinate).interfaceId ||
-      interfaceId == type(IERC721).interfaceId ||
-      interfaceId == type(IERC721Metadata).interfaceId ||
       super.supportsInterface(interfaceId);
   }
 
@@ -138,108 +132,134 @@ contract ERC721Subordinate is IERC721Subordinate, ERC165, IERC721, IERC721Metada
     return _dominant.ownerOf(tokenId);
   }
 
-  /**
-   * @dev See {IERC721Metadata-name}.
-   */
-  function name() public view virtual override returns (string memory) {
-    return _name;
+}
+
+```
+
+The repo includes also an upgradeable version. 
+
+## The foundation blocks
+
+### IERC721DefaultApprovable
+
+```solidity
+// SPDX-License-Identifier: GPL3
+pragma solidity ^0.8.17;
+
+// Author: Francesco Sullo <francesco@sullo.co>
+
+// erc165 interfaceId 0xbfdf8f79
+interface IERC721DefaultApprovable {
+  // Must be emitted when the contract is deployed.
+  event DefaultApprovable(bool approvable);
+
+  // Must be emitted any time the status changes.
+  event Approvable(uint256 indexed tokenId, bool approvable);
+
+  // Returns true if the token is approvable.
+  // It should revert if the token does not exist.
+  function approvable(uint256 tokenId) external view returns (bool);
+
+  // A contract implementing this interface should not allow
+  // the approval for all. So, any actor validating this interface
+  // should assume that the tokens are not approvable for all.
+
+  // An extension of this interface may include info about the
+  // approval for all, but it should be considered as a separate
+  // feature, not as a replacement of this interface.
+}
+```
+
+### IERC721DefaultLockable
+
+```solidity
+// SPDX-License-Identifier: CC0-1.0
+pragma solidity ^0.8.0;
+
+// erc165 interfaceId 0xb45a3c0e
+interface IERC721DefaultLockable {
+  // Must be emitted one time, when the contract is deployed,
+  // defining the default status of any token that will be minted
+  event DefaultLocked(bool locked);
+
+  // Must be emitted any time the status changes
+  event Locked(uint256 indexed tokenId, bool locked);
+
+  // Returns the status of the token.
+  // It should revert if the token does not exist.
+  function locked(uint256 tokenId) external view returns (bool);
+}
+```
+
+### ERC721Badge
+
+It implements the IERC721DefaultApprovable and the IERC721DefaultLockable interfaces.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
+import "./IERC721DefaultApprovable.sol";
+import "./IERC721DefaultLockable.sol";
+
+contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721{
+  constructor(string memory name, string memory symbol) ERC721(name, symbol) {
+    emit DefaultApprovable(false);
+    emit DefaultLocked(true);
   }
 
-  /**
-   * @dev See {IERC721Metadata-symbol}.
-   */
-  function symbol() public view virtual override returns (string memory) {
-    return _symbol;
+  function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+    return
+    interfaceId == type(IERC721DefaultApprovable).interfaceId ||
+    interfaceId == type(IERC721DefaultLockable).interfaceId ||
+    super.supportsInterface(interfaceId);
   }
 
-  /**
-   * @dev See {IERC721Metadata-tokenURI}.
-   */
-  function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-    try _dominant.tokenURI(tokenId) returns (string memory) {
-    } catch (
-      bytes memory /*lowLevelData*/
-    ) {
-      revert("ERC721Metadata: URI query for nonexistent token");
-    }
-    string memory baseURI = _baseURI();
-    return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : "";
+  function approvable(uint256) external view returns (bool) {
+    return false;
   }
 
-  /**
-   * @dev Base URI for computing {tokenURI}. If set, the resulting URI for each
-   * token will be the concatenation of the `baseURI` and the `tokenId`. Empty
-   * by default, can be overridden in child contracts.
-   */
-  function _baseURI() internal view virtual returns (string memory) {
-    return "";
+  function locked(uint256) external view returns (bool) {
+    return true;
   }
 
-  /**
-   * @dev See {IERC721-approve}.
-   */
   function approve(address, uint256) public virtual override {
-    revert("ERC721Subordinate: approvals not allowed");
+    revert("approvals not allowed");
   }
 
-  /**
-   * @dev See {IERC721-getApproved}.
-   */
   function getApproved(uint256) public view virtual override returns (address) {
     return address(0);
   }
 
-  /**
-   * @dev See {IERC721-setApprovalForAll}.
-   */
   function setApprovalForAll(address, bool) public virtual override {
-    revert("ERC721Subordinate: approvals not allowed");
+    revert("approvals not allowed");
   }
 
-  /**
-   * @dev See {IERC721-isApprovedForAll}.
-   */
+
   function isApprovedForAll(address, address) public view virtual override returns (bool) {
     return false;
   }
 
-  /**
-   * @dev See {IERC721-transferFrom}.
-   */
   function transferFrom(
     address,
     address,
     uint256
   ) public virtual override {
-    revert("ERC721Subordinate: transfers not allowed");
+    revert("transfers not allowed");
   }
 
-  /**
-   * @dev See {IERC721-safeTransferFrom}.
-   */
-  function safeTransferFrom(
-    address,
-    address,
-    uint256
-  ) public virtual override {
-    revert("ERC721Subordinate: transfers not allowed");
-  }
-
-  /**
-   * @dev See {IERC721-safeTransferFrom}.
-   */
   function safeTransferFrom(
     address,
     address,
     uint256,
     bytes memory
   ) public virtual override {
-    revert("ERC721Subordinate: transfers not allowed");
+    revert("transfers not allowed");
   }
 }
 ```
-
-The repo includes also an upgradeable version. 
 
 ## How to use it
 
@@ -290,6 +310,21 @@ contract MySubordinateUpgradeable is ERC721SubordinateUpgradeable, UUPSUpgradeab
 
 ```
 Notice that there is no reason to make the subordinate enumerable because we can query the dominant token to get all the ID owned by someone and apply that to the subordinate.
+
+You can also just deploy a Soulbound token like this:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.17;
+
+import "@ndujalabs/erc721subordinate/contracts/ERC721Badge.sol";
+
+contract MySubordinate is ERC721Badge {
+  constructor() ERC721Badge("My Soulbound Token", "MST", myToken) {}
+}
+```
+
+
 
 ## How it works
 
