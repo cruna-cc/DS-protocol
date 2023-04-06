@@ -22,11 +22,7 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
   // dominant token contract
   IERC721 immutable private _dominant;
 
-  // Token name
-  string private _name;
-
-  // Token symbol
-  string private _symbol;
+  mapping(uint256 => bool) private _initialTransfers;
 
   /**
    * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection
@@ -48,6 +44,7 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Badge) returns (bool) {
     return
       interfaceId == type(IERC721Subordinate).interfaceId ||
+      interfaceId == type(IERC721).interfaceId ||
       super.supportsInterface(interfaceId);
   }
 
@@ -70,6 +67,14 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
    */
   function ownerOf(uint256 tokenId) public view virtual override returns (address) {
     return _dominant.ownerOf(tokenId);
+  }
+
+  function emitTransfer(uint tokenId) external override {
+    require(!_initialTransfers[tokenId], "ERC721Subordinate: already generated");
+    // if the token does not exist it will revert("ERC721: invalid token ID")
+    address tokenOwner = IERC721(dominantToken()).ownerOf(tokenId);
+    emit Transfer(address(0), tokenOwner, tokenId);
+    _initialTransfers[tokenId] = true;
   }
 
 }

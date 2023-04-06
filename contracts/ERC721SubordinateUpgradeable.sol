@@ -25,12 +25,7 @@ ERC721BadgeUpgradeable
   // dominant token contract
   IERC721Upgradeable private _dominant;
 
-  // Token name
-  string private _name;
-
-  // Token symbol
-  string private _symbol;
-
+  mapping(uint256 => bool) private _initialTransfers;
 
   /**
    * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -54,6 +49,7 @@ ERC721BadgeUpgradeable
   returns (bool)
   {
     return interfaceId == type(IERC721SubordinateUpgradeable).interfaceId ||
+    interfaceId == type(IERC721Upgradeable).interfaceId ||
     super.supportsInterface(interfaceId);
   }
 
@@ -76,6 +72,14 @@ ERC721BadgeUpgradeable
    */
   function ownerOf(uint256 tokenId) public view virtual override returns (address) {
     return _dominant.ownerOf(tokenId);
+  }
+
+  function emitTransfer(uint tokenId) external override {
+    require(!_initialTransfers[tokenId], "ERC721Subordinate: already generated");
+    // if the token does not exist it will revert("ERC721: invalid token ID")
+    address tokenOwner = IERC721Upgradeable(dominantToken()).ownerOf(tokenId);
+    emit Transfer(address(0), tokenOwner, tokenId);
+    _initialTransfers[tokenId] = true;
   }
 
   uint256[50] private __gap;
