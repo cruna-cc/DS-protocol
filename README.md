@@ -335,6 +335,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.5.1**
+- modify revert reasons in ERC721Badge for consistency
+
 **0.5.0**
 - (breaking change) modify the interface to add the `emitTransfer` function. Any upgradeable contract implementing the previous version won't by ugradeable. While this is not ideal, it is better for future usages, considering we still are in the proposal stage.
 

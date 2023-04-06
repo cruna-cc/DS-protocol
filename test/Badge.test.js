@@ -31,13 +31,13 @@ describe("Badge", function () {
         .revertedWith("approvals not allowed")
 
     await expect(myBadge.connect(holder1).setApprovalForAll(marketplace.address, true))
-        .revertedWith("approvals not allowed")
+        .revertedWith("ERC721Badge: approvals not allowed")
 
     await expect(myBadge.connect(holder1)["safeTransferFrom(address,address,uint256)"](holder1.address, holder2.address, 1))
-        .revertedWith("transfers not allowed")
+        .revertedWith("ERC721Badge: transfers not allowed")
 
     await expect(myBadge.connect(holder1).transferFrom(holder1.address, holder2.address, 1))
-        .revertedWith("transfers not allowed")
+        .revertedWith("ERC721Badge: transfers not allowed")
   });
 
 });

@@ -44,7 +44,7 @@ contract ERC721BadgeUpgradeable is
   }
 
   function approve(address, uint256) public virtual override {
-    revert("approvals not allowed");
+    revert("ERC721BadgeUpgradeable: approvals not allowed");
   }
 
   function getApproved(uint256) public view virtual override returns (address) {
@@ -52,7 +52,7 @@ contract ERC721BadgeUpgradeable is
   }
 
   function setApprovalForAll(address, bool) public virtual override {
-    revert("approvals not allowed");
+    revert("ERC721BadgeUpgradeable: approvals not allowed");
   }
 
   function isApprovedForAll(address, address) public view virtual override returns (bool) {
@@ -64,7 +64,7 @@ contract ERC721BadgeUpgradeable is
     address,
     uint256
   ) public virtual override {
-    revert("transfers not allowed");
+    revert("ERC721BadgeUpgradeable: transfers not allowed");
   }
 
   function safeTransferFrom(
@@ -73,6 +73,6 @@ contract ERC721BadgeUpgradeable is
     uint256,
     bytes memory
   ) public virtual override {
-    revert("transfers not allowed");
+    revert("ERC721BadgeUpgradeable: transfers not allowed");
   }
 }
