@@ -19,6 +19,9 @@ contract ERC721SubordinateUpgradeable is IERC721SubordinateUpgradeable, ERC721Ba
   using AddressUpgradeable for address;
   using StringsUpgradeable for uint256;
 
+  error NotAnNFT();
+  error TransferAlreadyEmitted();
+
   // dominant token contract
   IERC721Upgradeable private _dominant;
 
@@ -34,9 +37,8 @@ contract ERC721SubordinateUpgradeable is IERC721SubordinateUpgradeable, ERC721Ba
     address dominant_
   ) internal initializer {
     __ERC721Badge_init(name_, symbol_);
-    require(dominant_.isContract(), "ERC721Subordinate: not a contract");
     _dominant = IERC721Upgradeable(dominant_);
-    require(_dominant.supportsInterface(type(IERC721Upgradeable).interfaceId), "ERC721Subordinate: dominant not IERC721");
+    if (!_dominant.supportsInterface(type(IERC721Upgradeable).interfaceId)) revert NotAnNFT();
   }
 
   /**
@@ -71,12 +73,12 @@ contract ERC721SubordinateUpgradeable is IERC721SubordinateUpgradeable, ERC721Ba
   }
 
   function _allowTransfer(address) internal view virtual returns (bool) {
-    // require(_msgSender() == tokenOwner, "ERC721Subordinate: not dominant owner");
+    // return _msgSender() == tokenOwner;
     return true;
   }
 
   function emitTransfer(uint256 tokenId) external virtual override {
-    require(!_initialTransfers[tokenId], "ERC721Subordinate: already generated");
+    if (_initialTransfers[tokenId]) revert TransferAlreadyEmitted();
     // if the token does not exist it will revert("ERC721: invalid token ID")
     address tokenOwner = IERC721Upgradeable(dominantToken()).ownerOf(tokenId);
     _allowTransfer(tokenOwner);
