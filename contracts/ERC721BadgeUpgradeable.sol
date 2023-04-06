@@ -8,13 +8,19 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./IERC721DefaultApprovable.sol";
 import "./IERC721DefaultLockable.sol";
 
-contract ERC721BadgeUpgradeable is IERC721DefaultLockable, IERC721DefaultApprovable, Initializable, ERC721Upgradeable, OwnableUpgradeable{
-
+contract ERC721BadgeUpgradeable is
+  IERC721DefaultLockable,
+  IERC721DefaultApprovable,
+  Initializable,
+  ERC721Upgradeable,
+  OwnableUpgradeable
+{
   /// @custom:oz-upgrades-unsafe-allow constructor
   constructor() {
     _disableInitializers();
   }
 
+  // solhint-disable-next-line func-name-mixedcase
   function __ERC721Badge_init(string memory name_, string memory symbol_) internal initializer {
     __ERC721_init(name_, symbol_);
     __Ownable_init();
@@ -24,9 +30,9 @@ contract ERC721BadgeUpgradeable is IERC721DefaultLockable, IERC721DefaultApprova
 
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
     return
-    interfaceId == type(IERC721DefaultApprovable).interfaceId ||
-    interfaceId == type(IERC721DefaultLockable).interfaceId ||
-    super.supportsInterface(interfaceId);
+      interfaceId == type(IERC721DefaultApprovable).interfaceId ||
+      interfaceId == type(IERC721DefaultLockable).interfaceId ||
+      super.supportsInterface(interfaceId);
   }
 
   function approvable(uint256) external view returns (bool) {
@@ -48,7 +54,6 @@ contract ERC721BadgeUpgradeable is IERC721DefaultLockable, IERC721DefaultApprova
   function setApprovalForAll(address, bool) public virtual override {
     revert("approvals not allowed");
   }
-
 
   function isApprovedForAll(address, address) public view virtual override returns (bool) {
     return false;

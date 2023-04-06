@@ -25,6 +25,21 @@ const Helpers = {
     }
   },
 
+  async Tx(promise, msg) {
+    console.debug();
+    if (msg) {
+      console.debug(msg);
+    }
+    let tx = await promise;
+    console.debug("Tx:", tx.hash);
+    await tx.wait();
+    console.debug("Mined.");
+  },
+
+  async currentChainId() {
+    return (await this.ethers.provider.getNetwork()).chainId;
+  },
+
   async deployContractBy(contractName, owner, ...args) {
     const Contract = await this.ethers.getContractFactory(contractName);
     const contract = await Contract.connect(owner).deploy(...args);

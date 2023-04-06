@@ -6,7 +6,6 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-//import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
 import "./IERC721Subordinate.sol";
 import "./ERC721Badge.sol";
@@ -21,13 +20,9 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
   using Strings for uint256;
 
   // dominant token contract
-  IERC721 immutable private _dominant;
+  IERC721 private immutable _dominant;
 
-  // Token name
-  string private _name;
-
-  // Token symbol
-  string private _symbol;
+  mapping(uint256 => bool) private _initialTransfers;
 
   /**
    * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection
@@ -49,6 +44,7 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Badge) returns (bool) {
     return
       interfaceId == type(IERC721Subordinate).interfaceId ||
+      interfaceId == type(IERC721).interfaceId ||
       super.supportsInterface(interfaceId);
   }
 
@@ -73,4 +69,17 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
     return _dominant.ownerOf(tokenId);
   }
 
+  function _allowTransfer(address) internal view virtual returns (bool) {
+    // require(_msgSender() == tokenOwner, "ERC721Subordinate: not dominant owner");
+    return true;
+  }
+
+  function emitTransfer(uint256 tokenId) external virtual override {
+    require(!_initialTransfers[tokenId], "ERC721Subordinate: already generated");
+    // if the token does not exist it will revert("ERC721: invalid token ID")
+    address tokenOwner = IERC721(dominantToken()).ownerOf(tokenId);
+    _allowTransfer(tokenOwner);
+    emit Transfer(address(0), tokenOwner, tokenId);
+    _initialTransfers[tokenId] = true;
+  }
 }

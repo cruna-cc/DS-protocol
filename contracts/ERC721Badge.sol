@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "./IERC721DefaultApprovable.sol";
 import "./IERC721DefaultLockable.sol";
 
-contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721{
+contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721 {
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {
     emit DefaultApprovable(false);
     emit DefaultLocked(true);
@@ -14,9 +14,9 @@ contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721
 
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
     return
-    interfaceId == type(IERC721DefaultApprovable).interfaceId ||
-    interfaceId == type(IERC721DefaultLockable).interfaceId ||
-    super.supportsInterface(interfaceId);
+      interfaceId == type(IERC721DefaultApprovable).interfaceId ||
+      interfaceId == type(IERC721DefaultLockable).interfaceId ||
+      super.supportsInterface(interfaceId);
   }
 
   function approvable(uint256) external view returns (bool) {
@@ -38,7 +38,6 @@ contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721
   function setApprovalForAll(address, bool) public virtual override {
     revert("approvals not allowed");
   }
-
 
   function isApprovedForAll(address, address) public view virtual override returns (bool) {
     return false;
