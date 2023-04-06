@@ -15,6 +15,10 @@ contract ERC721BadgeUpgradeable is
   ERC721Upgradeable,
   OwnableUpgradeable
 {
+
+  error ApprovalNotAllowed();
+  error TransferNotAllowed();
+
   /// @custom:oz-upgrades-unsafe-allow constructor
   constructor() {
     _disableInitializers();
@@ -44,7 +48,7 @@ contract ERC721BadgeUpgradeable is
   }
 
   function approve(address, uint256) public virtual override {
-    revert("ERC721BadgeUpgradeable: approvals not allowed");
+    revert ApprovalNotAllowed();
   }
 
   function getApproved(uint256) public view virtual override returns (address) {
@@ -52,7 +56,7 @@ contract ERC721BadgeUpgradeable is
   }
 
   function setApprovalForAll(address, bool) public virtual override {
-    revert("ERC721BadgeUpgradeable: approvals not allowed");
+    revert ApprovalNotAllowed();
   }
 
   function isApprovedForAll(address, address) public view virtual override returns (bool) {
@@ -64,7 +68,7 @@ contract ERC721BadgeUpgradeable is
     address,
     uint256
   ) public virtual override {
-    revert("ERC721BadgeUpgradeable: transfers not allowed");
+    revert TransferNotAllowed();
   }
 
   function safeTransferFrom(
@@ -73,6 +77,6 @@ contract ERC721BadgeUpgradeable is
     uint256,
     bytes memory
   ) public virtual override {
-    revert("ERC721BadgeUpgradeable: transfers not allowed");
+    revert TransferNotAllowed();
   }
 }

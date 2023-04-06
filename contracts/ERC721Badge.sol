@@ -7,6 +7,10 @@ import "./IERC721DefaultApprovable.sol";
 import "./IERC721DefaultLockable.sol";
 
 contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721 {
+
+  error ApprovalNotAllowed();
+  error TransferNotAllowed();
+
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {
     emit DefaultApprovable(false);
     emit DefaultLocked(true);
@@ -28,7 +32,7 @@ contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721
   }
 
   function approve(address, uint256) public virtual override {
-    revert("ERC721Badge: approvals not allowed");
+    revert ApprovalNotAllowed();
   }
 
   function getApproved(uint256) public view virtual override returns (address) {
@@ -36,7 +40,7 @@ contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721
   }
 
   function setApprovalForAll(address, bool) public virtual override {
-    revert("ERC721Badge: approvals not allowed");
+    revert ApprovalNotAllowed();
   }
 
   function isApprovedForAll(address, address) public view virtual override returns (bool) {
@@ -48,7 +52,7 @@ contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721
     address,
     uint256
   ) public virtual override {
-    revert("ERC721Badge: transfers not allowed");
+    revert TransferNotAllowed();
   }
 
   function safeTransferFrom(
@@ -57,6 +61,6 @@ contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721
     uint256,
     bytes memory
   ) public virtual override {
-    revert("ERC721Badge: transfers not allowed");
+    revert TransferNotAllowed();
   }
 }
