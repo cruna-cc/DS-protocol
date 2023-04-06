@@ -28,16 +28,16 @@ describe("Badge", function () {
     expect(await myBadge.approvable(1)).equal(false)
 
     await expect(myBadge.connect(holder1).approve(marketplace.address, 1))
-        .revertedWith("approvals not allowed")
+        .revertedWith("ApprovalNotAllowed()")
 
     await expect(myBadge.connect(holder1).setApprovalForAll(marketplace.address, true))
-        .revertedWith("ERC721Badge: approvals not allowed")
+        .revertedWith("ApprovalNotAllowed()")
 
     await expect(myBadge.connect(holder1)["safeTransferFrom(address,address,uint256)"](holder1.address, holder2.address, 1))
-        .revertedWith("ERC721Badge: transfers not allowed")
+        .revertedWith("TransferNotAllowed()")
 
     await expect(myBadge.connect(holder1).transferFrom(holder1.address, holder2.address, 1))
-        .revertedWith("ERC721Badge: transfers not allowed")
+        .revertedWith("TransferNotAllowed()")
   });
 
 });
