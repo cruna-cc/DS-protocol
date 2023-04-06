@@ -335,6 +335,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.5.2**
+- using revert error() instead of require(false, "message")
+
 **0.5.1**
 - modify revert reasons in ERC721Badge for consistency
 
