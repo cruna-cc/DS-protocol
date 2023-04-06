@@ -1,7 +1,7 @@
 {
   "name": "@ndujalabs/erc721subordinate",
   "version": "0.5.0",
-  "description": "A simple approach to lock NFT in place w/out losing ownership",
+  "description": "A subordinate NFT that depends on a dominant NFT",
   "publishConfig": {
     "access": "public"
   },
