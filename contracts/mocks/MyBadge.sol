@@ -14,5 +14,4 @@ contract MyBadge is ERC721Badge {
   function getInterfacesIds() public pure returns (bytes4, bytes4) {
     return (type(IERC721DefaultApprovable).interfaceId, type(IERC721DefaultLockable).interfaceId);
   }
-
 }

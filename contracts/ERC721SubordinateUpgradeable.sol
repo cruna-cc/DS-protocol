@@ -15,10 +15,7 @@ import "./ERC721BadgeUpgradeable.sol";
  * the Metadata extension, but not including the Enumerable extension, which is available separately as
  * {ERC721Enumerable}. The reference implementation can be found in OpenZeppelin Contracts upgradeable v4.8.0.
  */
-contract ERC721SubordinateUpgradeable is
-IERC721SubordinateUpgradeable,
-ERC721BadgeUpgradeable
-{
+contract ERC721SubordinateUpgradeable is IERC721SubordinateUpgradeable, ERC721BadgeUpgradeable {
   using AddressUpgradeable for address;
   using StringsUpgradeable for uint256;
 
@@ -31,7 +28,11 @@ ERC721BadgeUpgradeable
    * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
    */
   // solhint-disable
-  function __ERC721Subordinate_init(string memory name_, string memory symbol_, address dominant_) internal initializer {
+  function __ERC721Subordinate_init(
+    string memory name_,
+    string memory symbol_,
+    address dominant_
+  ) internal initializer {
     __ERC721Badge_init(name_, symbol_);
     require(dominant_.isContract(), "ERC721Subordinate: not a contract");
     _dominant = IERC721Upgradeable(dominant_);
@@ -41,16 +42,11 @@ ERC721BadgeUpgradeable
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId)
-  public
-  view
-  virtual
-  override(ERC721BadgeUpgradeable)
-  returns (bool)
-  {
-    return interfaceId == type(IERC721SubordinateUpgradeable).interfaceId ||
-    interfaceId == type(IERC721Upgradeable).interfaceId ||
-    super.supportsInterface(interfaceId);
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721BadgeUpgradeable) returns (bool) {
+    return
+      interfaceId == type(IERC721SubordinateUpgradeable).interfaceId ||
+      interfaceId == type(IERC721Upgradeable).interfaceId ||
+      super.supportsInterface(interfaceId);
   }
 
   /**
@@ -74,10 +70,16 @@ ERC721BadgeUpgradeable
     return _dominant.ownerOf(tokenId);
   }
 
-  function emitTransfer(uint tokenId) external virtual override {
+  function _allowTransfer(address) internal view virtual returns (bool) {
+    // require(_msgSender() == tokenOwner, "ERC721Subordinate: not dominant owner");
+    return true;
+  }
+
+  function emitTransfer(uint256 tokenId) external virtual override {
     require(!_initialTransfers[tokenId], "ERC721Subordinate: already generated");
     // if the token does not exist it will revert("ERC721: invalid token ID")
     address tokenOwner = IERC721Upgradeable(dominantToken()).ownerOf(tokenId);
+    _allowTransfer(tokenOwner);
     emit Transfer(address(0), tokenOwner, tokenId);
     _initialTransfers[tokenId] = true;
   }

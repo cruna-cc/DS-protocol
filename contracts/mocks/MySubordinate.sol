@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "../ERC721Subordinate.sol";
 
 contract MySubordinate is ERC721Subordinate {
-
   using Strings for uint256;
 
   constructor(address myToken) ERC721Subordinate("MY Subordinate", "mSUB", myToken) {}
@@ -16,8 +15,7 @@ contract MySubordinate is ERC721Subordinate {
   }
 
   function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-    try IERC721(dominantToken()).ownerOf(tokenId) returns (address) {
-    } catch (
+    try IERC721(dominantToken()).ownerOf(tokenId) returns (address) {} catch (
       bytes memory /*lowLevelData*/
     ) {
       revert("ERC721Metadata: URI query for nonexistent token");
@@ -29,5 +27,4 @@ contract MySubordinate is ERC721Subordinate {
   function _baseURI() internal pure override returns (string memory) {
     return "https://img.everdragons2.com/e2gt/";
   }
-
 }

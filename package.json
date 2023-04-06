@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "test": "NODE_ENV=test npx hardhat test",
-    "compile": "npx hardhat compile",
+    "compile": "NODE_ENV=test npx hardhat compile",
     "lint": "prettier --write 'contracts/**/*.sol' && solhint 'contracts/**/*.sol'",
     "format": "npx prettier --write ./test/fixtures/**/*.js ./**/*.js"
   },

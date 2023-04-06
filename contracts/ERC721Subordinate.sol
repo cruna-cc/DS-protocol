@@ -20,7 +20,7 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
   using Strings for uint256;
 
   // dominant token contract
-  IERC721 immutable private _dominant;
+  IERC721 private immutable _dominant;
 
   mapping(uint256 => bool) private _initialTransfers;
 
@@ -69,12 +69,17 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
     return _dominant.ownerOf(tokenId);
   }
 
-  function emitTransfer(uint tokenId) external virtual override {
+  function _allowTransfer(address) internal view virtual returns (bool) {
+    // require(_msgSender() == tokenOwner, "ERC721Subordinate: not dominant owner");
+    return true;
+  }
+
+  function emitTransfer(uint256 tokenId) external virtual override {
     require(!_initialTransfers[tokenId], "ERC721Subordinate: already generated");
     // if the token does not exist it will revert("ERC721: invalid token ID")
     address tokenOwner = IERC721(dominantToken()).ownerOf(tokenId);
+    _allowTransfer(tokenOwner);
     emit Transfer(address(0), tokenOwner, tokenId);
     _initialTransfers[tokenId] = true;
   }
-
 }
