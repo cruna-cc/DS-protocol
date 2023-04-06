@@ -69,7 +69,7 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
     return _dominant.ownerOf(tokenId);
   }
 
-  function emitTransfer(uint tokenId) external override {
+  function emitTransfer(uint tokenId) external virtual override {
     require(!_initialTransfers[tokenId], "ERC721Subordinate: already generated");
     // if the token does not exist it will revert("ERC721: invalid token ID")
     address tokenOwner = IERC721(dominantToken()).ownerOf(tokenId);
