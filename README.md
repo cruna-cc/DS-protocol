@@ -352,6 +352,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.6.1**
+- fixing missing virtual statement in dominant tokens
+
 **0.6.0**
 - (breaking change) add explicit reference to subordinate in dominant, so that the dominant can propagate the emission of Transfer events to the subordinate. It is necessary to emit Transfer events in the subordinate, because offline services, like marketplaces, index Transfer events in order to list the tokens. However, it is not mandatory and a project can decide to keep its subordinates not visible in the marketplaces.
 

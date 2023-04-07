@@ -16,18 +16,18 @@ contract ERC721Dominant is IERC721Dominant, ERC721 {
 
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
 
-  function addSubordinate(address subordinate) public {
+  function addSubordinate(address subordinate) public virtual {
     if (ERC721(subordinate).supportsInterface(type(IERC721Subordinate).interfaceId) == false)
       revert NotASubordinate(subordinate);
     if (IERC721Subordinate(subordinate).dominantToken() != address(this)) revert NotOwnedByDominant(subordinate, address(this));
     _subordinates[_nextSubordinateId++] = subordinate;
   }
 
-  function subordinateTokens(uint256 index) external view returns (address) {
+  function subordinateTokens(uint256 index) external virtual view returns (address) {
     return _subordinates[index];
   }
 
-  function supportsInterface(bytes4 interfaceId) public view override(ERC721) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721) returns (bool) {
     return interfaceId == type(IERC721Dominant).interfaceId || super.supportsInterface(interfaceId);
   }
 
@@ -36,7 +36,7 @@ contract ERC721Dominant is IERC721Dominant, ERC721 {
     address to,
     uint256 tokenId,
     uint256 batchSize
-  ) internal override(ERC721) {
+  ) internal virtual override(ERC721) {
     for (uint256 i = 0; i < _nextSubordinateId; i++) {
       address subordinate = _subordinates[i];
       if (subordinate != address(0)) {
