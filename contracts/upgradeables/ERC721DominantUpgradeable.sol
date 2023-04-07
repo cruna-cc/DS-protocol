@@ -28,7 +28,7 @@ contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable,
     return interfaceId == type(IERC721DominantUpgradeable).interfaceId || super.supportsInterface(interfaceId);
   }
 
-  function addSubordinate(address subordinate) public {
+  function addSubordinate(address subordinate) public virtual {
     if (ERC721Upgradeable(subordinate).supportsInterface(type(IERC721SubordinateUpgradeable).interfaceId) == false)
       revert NotASubordinate(subordinate);
 
@@ -38,7 +38,7 @@ contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable,
     _subordinates[_nextSubordinateId++] = subordinate;
   }
 
-  function subordinateTokens(uint256 index) external view returns (address) {
+  function subordinateTokens(uint256 index) external virtual  view returns (address) {
     return _subordinates[index];
   }
 
@@ -47,7 +47,7 @@ contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable,
     address to,
     uint256 tokenId,
     uint256 batchSize
-  ) internal override(ERC721Upgradeable) {
+  ) internal virtual override(ERC721Upgradeable) {
     for (uint256 i = 0; i < _nextSubordinateId; i++) {
       address subordinate = _subordinates[i];
       if (subordinate != address(0)) {
