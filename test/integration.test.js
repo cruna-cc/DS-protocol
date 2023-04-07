@@ -17,9 +17,18 @@ describe("Subordinate", function () {
   beforeEach(async function () {
     myToken = await deployContract("MyToken");
 
+    expect(await myToken.getInterfacesIds()).deep.equal(["0x6ae735ff", "0x431694c0"])
+
+    subordinate = await deployContract("MySubordinate", myToken.address);
+    await myToken.addSubordinate(subordinate.address);
+
     await myToken.safeMint(holder1.address, 1)
     await myToken.safeMint(holder1.address, 2)
-    await myToken.safeMint(holder1.address, 3)
+    await expect(myToken.safeMint(holder1.address, 3))
+        .emit(myToken, "Transfer")
+        .withArgs(ethers.constants.AddressZero, holder1.address, 3)
+        .emit(subordinate, "Transfer")
+        .withArgs(ethers.constants.AddressZero, holder1.address, 3)
 
     myTokenEnumerable = await deployContract("MyTokenEnumerable");
 
@@ -27,7 +36,6 @@ describe("Subordinate", function () {
     await myTokenEnumerable.safeMint(holder1.address, 3)
     await myTokenEnumerable.safeMint(holder1.address, 2)
 
-    subordinate = await deployContract("MySubordinate", myToken.address);
     subordinateUpgradeable = await deployContractUpgradeable("MySubordinateUpgradeable", [myTokenEnumerable.address]);
 
   });
@@ -54,7 +62,7 @@ describe("Subordinate", function () {
     expect(await myToken.balanceOf(holder2.address)).equal(1)
     expect(await subordinate.balanceOf(holder2.address)).equal(1)
 
-    expect(await subordinate.getInterfaceId()).equal("0x4a5a1d1d")
+    expect(await subordinate.getInterfaceId()).equal("0x431694c0")
 
   });
 
@@ -94,7 +102,7 @@ describe("Subordinate", function () {
     expect(await myTokenEnumerable.balanceOf(holder2.address)).equal(1)
     expect(await subordinateUpgradeable.balanceOf(holder2.address)).equal(1)
 
-    expect(await subordinateUpgradeable.getInterfaceId()).equal("0x4a5a1d1d")
+    expect(await subordinateUpgradeable.getInterfaceId()).equal("0x431694c0")
   });
 
 });

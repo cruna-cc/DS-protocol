@@ -6,7 +6,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol"
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-import "./IERC721SubordinateUpgradeable.sol";
+import "./interfaces/IERC721SubordinateUpgradeable.sol";
 import "./ERC721BadgeUpgradeable.sol";
 
 /**
@@ -21,16 +21,19 @@ contract ERC721SubordinateUpgradeable is IERC721SubordinateUpgradeable, ERC721Ba
 
   error NotAnNFT();
   error TransferAlreadyEmitted();
+  error OnlyDominant();
 
   // dominant token contract
   IERC721Upgradeable private _dominant;
 
+  modifier onlyDominant() {
+    if (msg.sender != address(_dominant)) revert OnlyDominant();
+    _;
+  }
+
   mapping(uint256 => bool) private _initialTransfers;
 
-  /**
-   * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
-   */
-  // solhint-disable
+  // solhint-disable func-name-mixedcase
   function __ERC721Subordinate_init(
     string memory name_,
     string memory symbol_,
@@ -77,13 +80,25 @@ contract ERC721SubordinateUpgradeable is IERC721SubordinateUpgradeable, ERC721Ba
     return true;
   }
 
-  function emitTransfer(uint256 tokenId) external virtual override {
+  function emitInitialTransfer(uint256 tokenId) external virtual {
     if (_initialTransfers[tokenId]) revert TransferAlreadyEmitted();
     // if the token does not exist it will revert("ERC721: invalid token ID")
-    address tokenOwner = IERC721Upgradeable(dominantToken()).ownerOf(tokenId);
+    address tokenOwner = _dominant.ownerOf(tokenId);
     _allowTransfer(tokenOwner);
     emit Transfer(address(0), tokenOwner, tokenId);
     _initialTransfers[tokenId] = true;
+  }
+
+  function emitTransfer(
+    address from,
+    address to,
+    uint256 tokenId
+  ) external virtual override onlyDominant {
+    if (!_initialTransfers[tokenId]) {
+      from = address(0);
+      _initialTransfers[tokenId] = true;
+    }
+    emit Transfer(from, to, tokenId);
   }
 
   uint256[50] private __gap;

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 import "../ERC721Badge.sol";
-import "../ERC721BadgeUpgradeable.sol";
+import "../upgradeables/ERC721BadgeUpgradeable.sol";
 
 contract MyBadge is ERC721Badge {
   constructor() ERC721Badge("MY Badge", "mBDG") {}
