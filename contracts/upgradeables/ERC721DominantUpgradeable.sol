@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./interfaces/IERC721DominantUpgradeable.sol";
 import "./interfaces/IERC721SubordinateUpgradeable.sol";
 
-abstract contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable, ERC721Upgradeable {
+contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable, ERC721Upgradeable {
   error NotOwnedByDominant(address subordinate, address dominant);
   error NotASubordinate(address subordinate);
 

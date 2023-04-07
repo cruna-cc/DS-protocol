@@ -41,6 +41,11 @@ contract ERC721SubordinateUpgradeable is IERC721SubordinateUpgradeable, ERC721Ba
   ) internal initializer {
     __ERC721Badge_init(name_, symbol_);
     _dominant = IERC721Upgradeable(dominant_);
+    // We do not check it is a dominant token to give the possibility to associate
+    // subordinate tokens to any existing NFT. In this case, however, the token
+    // should implement a function to emit Transfer events to be visible on offline
+    // marketplaces (e.g. OpenSea) executed by an oracle when a dominant token is
+    // transferred.
     if (!_dominant.supportsInterface(type(IERC721Upgradeable).interfaceId)) revert NotAnNFT();
   }
 

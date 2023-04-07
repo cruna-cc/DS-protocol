@@ -19,5 +19,4 @@ contract MyToken is ERC721Dominant, Ownable {
   function getInterfacesIds() public pure returns (bytes4, bytes4) {
     return (type(IERC721Dominant).interfaceId, type(IERC721Subordinate).interfaceId);
   }
-
 }
