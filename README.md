@@ -293,6 +293,47 @@ You initialize the subordinate token passing the address of the main token and t
 
 What makes the difference is the base token uri. Change that, and everything will work great.
 
+A simple example:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.17;
+
+import "@ndujalabs/erc721subordinate/contracts/ERC721Subordinate.sol";
+
+contract MySubordinate is ERC721Subordinate {
+  constructor(address myToken) ERC721Subordinate("MyToken", "MTK", myToken) {}
+}
+```
+
+Another example, upgradeable
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.9;
+
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+
+import "../ERC721SubordinateUpgradeable.sol";
+
+contract MySubordinateUpgradeable is ERC721SubordinateUpgradeable, UUPSUpgradeable {
+  /// @custom:oz-upgrades-unsafe-allow constructor
+  constructor() initializer {}
+
+  function initialize(address myTokenEnumerableUpgradeable) public initializer {
+    __ERC721EnumerableSubordinate_init("SuperToken", "SPT", myTokenEnumerableUpgradeable);
+  }
+
+  function _authorizeUpgrade(address newImplementation) internal virtual override {}
+
+  function getInterfaceId() public pure returns (bytes4) {
+    return type(IERC721SubordinateUpgradeable).interfaceId;
+  }
+}
+
+```
+Notice that there is no reason to make the subordinate enumerable because we can query the dominant token to get all the ID owned by someone and apply that to the subordinate.
+
 ## Similar proposal
 
 There are similar proposal that moves in the same realm.
