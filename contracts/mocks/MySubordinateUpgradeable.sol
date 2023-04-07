@@ -3,7 +3,7 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-import "../ERC721SubordinateUpgradeable.sol";
+import "../upgradeables/ERC721SubordinateUpgradeable.sol";
 
 contract MySubordinateUpgradeable is ERC721SubordinateUpgradeable, UUPSUpgradeable {
   /// @custom:oz-upgrades-unsafe-allow constructor

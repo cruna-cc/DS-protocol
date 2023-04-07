@@ -3,11 +3,10 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-import "./IERC721DefaultApprovable.sol";
-import "./IERC721DefaultLockable.sol";
+import "./interfaces/IERC721DefaultApprovable.sol";
+import "./interfaces/IERC721DefaultLockable.sol";
 
 contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721 {
-
   error ApprovalNotAllowed();
   error TransferNotAllowed();
 

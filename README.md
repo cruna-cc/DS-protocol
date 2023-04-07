@@ -1,6 +1,9 @@
 # ERC721Subordinate
 A subordinate ERC721 contract is a type of non-fungible token (NFT) that follows the ownership of a dominant NFT, which can be an ERC721 contract that does not have any additional features.
 
+## BE CAREFUL — This is a work in progress and changes are likely to happen. Use at your own risk. Wait for version 1.0.0 before using in production.
+
+
 ## Why
 
 In 2021, when we started Everdragons2, we had in mind of using the head of the dragons for a PFP token based on the Everdragons2 that you own. Here an example of a full dragon and just the head.
@@ -16,16 +19,10 @@ ERC721Subordinate introduces a subordinate token that are owned by whoever owns 
 ## The interface
 
 ``` solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
-
-// Authors: Francesco Sullo <francesco@sullo.co>
-
 // A subordinate contract has no control on its own ownership.
 // Whoever owns the main token owns the subordinate token.
-// ERC165 interface id is 0x4a5a1d1d
+// ERC165 interface id is 0x431694c0
 interface IERC721Subordinate {
-
   // The function dominantToken() returns the address of the dominant token.
   function dominantToken() external view returns (address);
 
@@ -33,7 +30,11 @@ interface IERC721Subordinate {
   // transfer from address 0. This function allow to fix the issue, but
   // it is not mandatory — in same cases, the deployer may want the subordinate
   // being not visible on marketplaces.
-  function emitTransfer(uint tokenId) external;
+  function emitTransfer(
+    address from,
+    address to,
+    uint256 tokenId
+  ) external;
 }
 ```
 
@@ -52,9 +53,8 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
-import "./IERC721Subordinate.sol";
+import "./interfaces/IERC721Subordinate.sol";
 import "./ERC721Badge.sol";
 
 /**
@@ -62,18 +62,23 @@ import "./ERC721Badge.sol";
  * Strictly based on OpenZeppelin's implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721]
  * in openzeppelin/contracts v4.8.0.
  */
-contract ERC721Subordinate is IERC721Subordinate, ERC165, ERC721Badge {
+contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
   using Address for address;
   using Strings for uint256;
 
+  error NotAnNFT();
+  error TransferAlreadyEmitted();
+  error OnlyDominant();
+
   // dominant token contract
-  IERC721 immutable private _dominant;
+  IERC721 private immutable _dominant;
 
-  // Token name
-  string private _name;
+  mapping(uint256 => bool) private _initialTransfers;
 
-  // Token symbol
-  string private _symbol;
+  modifier onlyDominant() {
+    if (msg.sender != address(_dominant)) revert OnlyDominant();
+    _;
+  }
 
   /**
    * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection
@@ -84,17 +89,17 @@ contract ERC721Subordinate is IERC721Subordinate, ERC165, ERC721Badge {
     string memory symbol_,
     address dominant_
   ) ERC721Badge(name_, symbol_) {
-    require(dominant_.isContract(), "ERC721Subordinate: not a contract");
     _dominant = IERC721(dominant_);
-    require(_dominant.supportsInterface(type(IERC721).interfaceId), "ERC721Subordinate: dominant not IERC721");
+    if (!_dominant.supportsInterface(type(IERC721).interfaceId)) revert NotAnNFT();
   }
 
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, ERC721Badge) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Badge) returns (bool) {
     return
       interfaceId == type(IERC721Subordinate).interfaceId ||
+      interfaceId == type(IERC721).interfaceId ||
       super.supportsInterface(interfaceId);
   }
 
@@ -119,6 +124,31 @@ contract ERC721Subordinate is IERC721Subordinate, ERC165, ERC721Badge {
     return _dominant.ownerOf(tokenId);
   }
 
+  function _allowTransfer(address) internal view virtual returns (bool) {
+    // return _msgSender() == tokenOwner;
+    return true;
+  }
+
+  function emitInitialTransfer(uint256 tokenId) external virtual {
+    if (!_initialTransfers[tokenId]) revert TransferAlreadyEmitted();
+    // if the token does not exist it will revert("ERC721: invalid token ID")
+    address tokenOwner = _dominant.ownerOf(tokenId);
+    _allowTransfer(tokenOwner);
+    emit Transfer(address(0), tokenOwner, tokenId);
+    _initialTransfers[tokenId] = true;
+  }
+
+  function emitTransfer(
+    address from,
+    address to,
+    uint256 tokenId
+  ) external virtual override onlyDominant {
+    if (!_initialTransfers[tokenId]) {
+      from = address(0);
+      _initialTransfers[tokenId] = true;
+    }
+    emit Transfer(from, to, tokenId);
+  }
 }
 
 ```
@@ -250,12 +280,18 @@ contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721
 
 ## How to use it
 
-Install the dependencies
+Install the dependencies like
 ``` 
 npm i @openzeppelin/contracts \
  @openzeppelin/contracts-upgradeable \
  @ndujalabs/erc721subordinate
 ```
+
+## How it works
+
+You initialize the subordinate token passing the address of the main token and the subordinate takes anything from that. Look at some example in mocks and the testing.
+
+What makes the difference is the base token uri. Change that, and everything will work great.
 
 A simple example:
 
@@ -298,42 +334,26 @@ contract MySubordinateUpgradeable is ERC721SubordinateUpgradeable, UUPSUpgradeab
 ```
 Notice that there is no reason to make the subordinate enumerable because we can query the dominant token to get all the ID owned by someone and apply that to the subordinate.
 
-You can also just deploy a Soulbound token like this:
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.17;
-
-import "@ndujalabs/erc721subordinate/contracts/ERC721Badge.sol";
-
-contract MySubordinate is ERC721Badge {
-  constructor() ERC721Badge("My Soulbound Token", "MST", myToken) {}
-}
-```
-
-
-
-## How it works
-
-You initialize the subordinate token passing the address of the main token and the subordinate takes anything from that. Look at some example in mocks and the testing.
-
-What makes the difference is the base token uri. Change that, and everything will work great.
-
 ## Similar proposal
 
 There are similar proposal that moves in the same realm.
 
 [EIP-6150: Hierarchical NFTs](https://github.com/ethereum/EIPs/blob/ad986045e87d1e659bf36541df6fc13315c59bd7/EIPS/eip-6150.md) (discussion at https://ethereum-magicians.org/t/eip-6150-hierarchical-nfts-an-extension-to-erc-721/12173) is a proposal for a new standard for non-fungible tokens (NFTs) on the Ethereum blockchain that would allow NFTs to have a hierarchical structure, similar to a filesystem. This would allow for the creation of complex structures, such as NFTs that contain other NFTs, or NFTs that represent collections of other NFTs. The proposal is currently in the discussion phase, and has not yet been implemented on the Ethereum network. ERC721Subordinate focuses instead on a simpler scenario, trying to solve a specific problem in the simplest possible way.
 
-EIP-3652 (https://ethereum-magicians.org/t/eip-3652-hierarchical-nft/6963) is very similar to EIP-6150. Both requires all the node following the standard. ERC721Subordinate is very different because it allows to create subordinates of existing, immutable NFTs.
+EIP-3652 (https://ethereum-magicians.org/t/eip-3652-hierarchical-nft/6963) is very similar to EIP-6150. Both requires all the node following the standard. ERC721Subordinate is very different because it allows to create subordinates of existing, immutable NFTs, if it is not necessary to show the subordinate on marketplaces.
 
 ## Implementations
 
 [Everdragons2PFP](https://github.com/ndujaLabs/everdragons2-core/blob/VP/contracts/Everdragons2PFP.sol)
 
+[Cruna Protocol](https://github.com/cruna_cc/cruna-protocol)
+
 Feel free to make a PR to add your contracts.
 
 ## History
+
+**0.6.0**
+- (breaking change) add explicit reference to subordinate in dominant, so that the dominant can propagate the emission of Transfer events to the subordinate. It is necessary to emit Transfer events in the subordinate, because offline services, like marketplaces, index Transfer events in order to list the tokens. However, it is not mandatory and a project can decide to keep its subordinates not visible in the marketplaces.
 
 **0.5.2**
 - using revert error() instead of require(false, "message")

@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-import "./IERC721Subordinate.sol";
+import "./interfaces/IERC721Subordinate.sol";
 import "./ERC721Badge.sol";
 
 /**
@@ -21,11 +21,17 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
 
   error NotAnNFT();
   error TransferAlreadyEmitted();
+  error OnlyDominant();
 
   // dominant token contract
   IERC721 private immutable _dominant;
 
   mapping(uint256 => bool) private _initialTransfers;
+
+  modifier onlyDominant() {
+    if (msg.sender != address(_dominant)) revert OnlyDominant();
+    _;
+  }
 
   /**
    * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection
@@ -37,6 +43,11 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
     address dominant_
   ) ERC721Badge(name_, symbol_) {
     _dominant = IERC721(dominant_);
+    // We do not check it is a dominant token to give the possibility to associate
+    // subordinate tokens to any existing NFT. In this case, however, the token
+    // should implement a function to emit Transfer events to be visible on offline
+    // marketplaces (e.g. OpenSea) executed by an oracle when a dominant token is
+    // transferred.
     if (!_dominant.supportsInterface(type(IERC721).interfaceId)) revert NotAnNFT();
   }
 
@@ -76,12 +87,24 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
     return true;
   }
 
-  function emitTransfer(uint256 tokenId) external virtual override {
-    if (_initialTransfers[tokenId]) revert TransferAlreadyEmitted();
+  function emitInitialTransfer(uint256 tokenId) external virtual {
+    if (!_initialTransfers[tokenId]) revert TransferAlreadyEmitted();
     // if the token does not exist it will revert("ERC721: invalid token ID")
-    address tokenOwner = IERC721(dominantToken()).ownerOf(tokenId);
+    address tokenOwner = _dominant.ownerOf(tokenId);
     _allowTransfer(tokenOwner);
     emit Transfer(address(0), tokenOwner, tokenId);
     _initialTransfers[tokenId] = true;
+  }
+
+  function emitTransfer(
+    address from,
+    address to,
+    uint256 tokenId
+  ) external virtual override onlyDominant {
+    if (!_initialTransfers[tokenId]) {
+      from = address(0);
+      _initialTransfers[tokenId] = true;
+    }
+    emit Transfer(from, to, tokenId);
   }
 }
