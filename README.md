@@ -352,6 +352,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.6.2**
+- fixing more missing virtual statement in dominant tokens
+
 **0.6.1**
 - fixing missing virtual statement in dominant tokens
 

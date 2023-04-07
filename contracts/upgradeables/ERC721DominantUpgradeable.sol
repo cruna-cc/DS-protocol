@@ -24,7 +24,7 @@ contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable,
     __ERC721_init(name, symbol);
   }
 
-  function supportsInterface(bytes4 interfaceId) public view override(ERC721Upgradeable) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view override(ERC721Upgradeable) virtual returns (bool) {
     return interfaceId == type(IERC721DominantUpgradeable).interfaceId || super.supportsInterface(interfaceId);
   }
 
