@@ -87,6 +87,8 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
     return true;
   }
 
+  // this can be called by everyone. However, the implementor can limit it, for example,
+  // to the owner of the dominant token
   function emitInitialTransfer(uint256 tokenId) external virtual {
     if (!_initialTransfers[tokenId]) revert TransferAlreadyEmitted();
     // if the token does not exist it will revert("ERC721: invalid token ID")

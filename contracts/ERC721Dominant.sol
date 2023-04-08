@@ -18,6 +18,7 @@ contract ERC721Dominant is IERC721Dominant, ERC721, ReentrancyGuard {
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
 
   function addSubordinate(address subordinate) public virtual {
+    // this MUST be called by the owner of the dominant token
     if (ERC721(subordinate).supportsInterface(type(IERC721Subordinate).interfaceId) == false)
       revert NotASubordinate(subordinate);
     if (IERC721Subordinate(subordinate).dominantToken() != address(this)) revert NotOwnedByDominant(subordinate, address(this));
