@@ -2,12 +2,13 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import "./interfaces/IERC721DominantUpgradeable.sol";
 import "./interfaces/IERC721SubordinateUpgradeable.sol";
 
-contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable, ERC721Upgradeable {
+contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable, ERC721Upgradeable, ReentrancyGuardUpgradeable {
   error NotOwnedByDominant(address subordinate, address dominant);
   error NotASubordinate(address subordinate);
 
@@ -47,14 +48,14 @@ contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable,
     address to,
     uint256 tokenId,
     uint256 batchSize
-  ) internal virtual override(ERC721Upgradeable) {
+  ) internal virtual override(ERC721Upgradeable) nonReentrant {
+    super._afterTokenTransfer(from, to, tokenId, batchSize);
     for (uint256 i = 0; i < _nextSubordinateId; i++) {
       address subordinate = _subordinates[i];
       if (subordinate != address(0)) {
         IERC721SubordinateUpgradeable(subordinate).emitTransfer(from, to, tokenId);
       }
     }
-    super._afterTokenTransfer(from, to, tokenId, batchSize);
   }
 
   uint256[50] private __gap;

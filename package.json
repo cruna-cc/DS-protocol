@@ -1,6 +1,6 @@
 {
   "name": "@ndujalabs/erc721subordinate",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "A subordinate NFT that depends on a dominant NFT",
   "publishConfig": {
     "access": "public"

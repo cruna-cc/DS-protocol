@@ -4,10 +4,11 @@ pragma solidity ^0.8.9;
 import "hardhat/console.sol";
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./interfaces/IERC721Subordinate.sol";
 import "./interfaces/IERC721Dominant.sol";
 
-contract ERC721Dominant is IERC721Dominant, ERC721 {
+contract ERC721Dominant is IERC721Dominant, ERC721, ReentrancyGuard {
   error NotOwnedByDominant(address subordinate, address dominant);
   error NotASubordinate(address subordinate);
 
@@ -36,13 +37,16 @@ contract ERC721Dominant is IERC721Dominant, ERC721 {
     address to,
     uint256 tokenId,
     uint256 batchSize
-  ) internal virtual override(ERC721) {
+  ) internal virtual override(ERC721) nonReentrant {
+    super._afterTokenTransfer(from, to, tokenId, batchSize);
+    // We perform this as last operation
+    // Notice that there is no loop risk because a dominant will have in general
+    // only 1 subordinate token. If it has more, it will be a very small number
     for (uint256 i = 0; i < _nextSubordinateId; i++) {
       address subordinate = _subordinates[i];
       if (subordinate != address(0)) {
         IERC721Subordinate(subordinate).emitTransfer(from, to, tokenId);
       }
     }
-    super._afterTokenTransfer(from, to, tokenId, batchSize);
   }
 }
