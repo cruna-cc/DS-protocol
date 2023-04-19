@@ -1,5 +1,5 @@
 {
-  "name": "@cruna/DS-protocol",
+  "name": "@cruna/ds-protocol",
   "version": "1.0.0",
   "description": "A dominant/subordinate NFTs protocol",
   "publishConfig": {
