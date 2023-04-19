@@ -1,16 +1,18 @@
-# ERC721Subordinate
-A subordinate ERC721 contract is a type of non-fungible token (NFT) that follows the ownership of a dominant NFT, which can be an ERC721 contract that does not have any additional features.
+# Cruna Dominant-Subordinate Protocol
+
+### This package was previously called @ndujaLabs/ERC721Subordinate
+
+A protocol to subordinate ERC721 contracts to a dominant contract so that the subordinate follows the ownership of the dominant, which can be even be an ERC721 contract that does not have any additional features.
 
 ## BE CAREFUL — This is a work in progress and changes are likely to happen. Use at your own risk. Wait for version 1.0.0 before using in production.
 
-
-## Why
+## Why~~~~
 
 In 2021, when we started Everdragons2, we had in mind of using the head of the dragons for a PFP token based on the Everdragons2 that you own. Here an example of a full dragon and just the head.
 
-![Dragon](https://github.com/ndujaLabs/ERC721Subordinate/blob/main/assets/Soolhoth.png)
+![Dragon](https://github.com/cruna-cc/DS-protocol/blob/main/assets/Soolhoth.png)
 
-![DragonPFP](https://github.com/ndujaLabs/ERC721Subordinate/blob/main/assets/Soolhoth_PFP.png)
+![DragonPFP](https://github.com/cruna-cc/DS-protocol/blob/main/assets/Soolhoth_PFP.png)
 
 The question was, _Should we allow people to transfer the PFP separately from the primary NFT?_ It didn't make much sense. At the same time, how to avoid that?
 
@@ -351,6 +353,10 @@ EIP-3652 (https://ethereum-magicians.org/t/eip-3652-hierarchical-nft/6963) is ve
 Feel free to make a PR to add your contracts.
 
 ## History
+
+**1.0.0**
+- transferring the repo from ndujaLabs to cruna-cc
+- renaming from @ndujalabs/erc721subordinate to @cruna/DS-protocol
 
 **0.7.0**
 - adding view function to check if an address is a subordinate

@@ -1,7 +1,7 @@
 const {expect} = require("chai");
 const {deployContractUpgradeable, deployContract, number} = require("./helpers");
 
-describe("Subordinate", function () {
+describe("Integration", function () {
   let myToken;
   let myTokenEnumerable;
 
