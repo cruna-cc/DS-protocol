@@ -352,6 +352,11 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**0.7.0**
+- adding view function to check if an address is a subordinate
+- adding view function to check the total number of subordinates
+- (breaking change) the id of the subordinate interface is now 0x48b041fd 
+
 **0.6.3**
 - adding check to avoid reentrancy in the dominant token
 

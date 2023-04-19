@@ -19,14 +19,35 @@ contract ERC721Dominant is IERC721Dominant, ERC721, ReentrancyGuard {
 
   function addSubordinate(address subordinate) public virtual {
     // this MUST be called by the owner of the dominant token
+    // We do not use Ownable here to leave the implementor the option
+    // to use AccessControl or other approaches
+    // you can override it like, for example:
+    //
+    //    function addSubordinate(address subordinate) public onlyOwner {
+    //      super.addSubordinate(subordinate);
+    //    }
+    //
     if (ERC721(subordinate).supportsInterface(type(IERC721Subordinate).interfaceId) == false)
       revert NotASubordinate(subordinate);
     if (IERC721Subordinate(subordinate).dominantToken() != address(this)) revert NotOwnedByDominant(subordinate, address(this));
     _subordinates[_nextSubordinateId++] = subordinate;
   }
 
-  function subordinateTokens(uint256 index) external virtual view returns (address) {
+  function subordinateByIndex(uint256 index) external virtual view returns (address) {
     return _subordinates[index];
+  }
+
+  function isSubordinate(address subordinate_) public virtual override view returns (bool) {
+    for (uint i = 0; i < _nextSubordinateId; i++) {
+      if (_subordinates[i] == subordinate_) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function countSubordinates() public view override returns (uint) {
+    return _nextSubordinateId;
   }
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721) returns (bool) {
