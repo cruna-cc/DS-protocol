@@ -39,8 +39,21 @@ contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable,
     _subordinates[_nextSubordinateId++] = subordinate;
   }
 
-  function subordinateTokens(uint256 index) external virtual  view returns (address) {
+  function subordinateByIndex(uint256 index) public virtual view returns (address) {
     return _subordinates[index];
+  }
+
+  function isSubordinate(address subordinate_) public virtual override view returns (bool) {
+    for (uint i = 0; i < _nextSubordinateId; i++) {
+      if (_subordinates[i] == subordinate_) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function countSubordinates() external view override returns (uint) {
+    return _nextSubordinateId;
   }
 
   function _afterTokenTransfer(

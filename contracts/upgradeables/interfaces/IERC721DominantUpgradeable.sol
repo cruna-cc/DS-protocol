@@ -11,5 +11,9 @@ pragma solidity ^0.8.9;
 interface IERC721DominantUpgradeable {
   // @dev It returns the address of subordinate tokens.
   // @param index The index of the subordinate token
-  function subordinateTokens(uint256 index) external view returns (address);
+  function subordinateByIndex(uint256 index) external view returns (address);
+
+  function isSubordinate(address subordinate_) external view returns (bool);
+
+  function countSubordinates() external view returns (uint);
 }

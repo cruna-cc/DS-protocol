@@ -5,7 +5,6 @@ const ethers = hre.ethers;
 const {deployContract, currentChainId, Tx} = require("../test/helpers");
 
 async function main() {
-
   let [deployer] = await ethers.getSigners();
   const chainId = await currentChainId();
   const network = chainId === 5 ? "goerli" : "localhost";
@@ -30,8 +29,8 @@ async function main() {
 }
 
 main()
-    .then(() => process.exit(0))
-    .catch((error) => {
-      console.error(error);
-      process.exit(1);
-    });
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
