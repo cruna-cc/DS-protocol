@@ -46,7 +46,7 @@ contract ERC721Dominant is IERC721Dominant, ERC721, ReentrancyGuard {
     return false;
   }
 
-  function countSubordinates() external view override returns (uint) {
+  function countSubordinates() public view override returns (uint) {
     return _nextSubordinateId;
   }
 

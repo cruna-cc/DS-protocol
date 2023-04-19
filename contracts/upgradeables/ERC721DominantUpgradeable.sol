@@ -52,7 +52,7 @@ contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable,
     return false;
   }
 
-  function countSubordinates() external view override returns (uint) {
+  function countSubordinates() public view override returns (uint) {
     return _nextSubordinateId;
   }
 
