@@ -7,7 +7,7 @@ pragma solidity ^0.8.9;
 // However, it it is necessary that the subordinate token is visible on services
 // like marketplaces, the dominant token must propagate any Transfer event to the subordinate
 
-// ERC165 interface id is 0x6ae735ff
+// ERC165 interface id is 0x48b041fd
 interface IERC721DominantUpgradeable {
   // @dev It returns the address of subordinate tokens.
   // @param index The index of the subordinate token

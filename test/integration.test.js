@@ -17,7 +17,7 @@ describe("Subordinate", function () {
   beforeEach(async function () {
     myToken = await deployContract("MyToken");
 
-    expect(await myToken.getInterfacesIds()).deep.equal(["0x6ae735ff", "0x431694c0"]);
+    expect(await myToken.getInterfacesIds()).deep.equal(["0x48b041fd", "0x431694c0"]);
 
     subordinate = await deployContract("MySubordinate", myToken.address);
     await myToken.addSubordinate(subordinate.address);
