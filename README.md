@@ -4,9 +4,9 @@
 
 A protocol to subordinate ERC721 contracts to a dominant contract so that the subordinate follows the ownership of the dominant, which can be even be an ERC721 contract that does not have any additional features.
 
-## BE CAREFUL — This is a work in progress and changes are likely to happen. Use at your own risk. Wait for version 1.0.0 before using in production.
+## BE CAREFUL — This is a work in progress and changes are likely to happen. Use at your own risk. Wait for this message to be removed before using in production
 
-## Why~~~~
+## Why
 
 In 2021, when we started Everdragons2, we had in mind of using the head of the dragons for a PFP token based on the Everdragons2 that you own. Here an example of a full dragon and just the head.
 
