@@ -1,7 +1,7 @@
 {
-  "name": "@ndujalabs/erc721subordinate",
-  "version": "0.7.0",
-  "description": "A subordinate NFT that depends on a dominant NFT",
+  "name": "@cruna/ds-protocol",
+  "version": "1.0.0",
+  "description": "A dominant/subordinate NFTs protocol",
   "publishConfig": {
     "access": "public"
   },
@@ -16,16 +16,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ndujaLabs/erc721subordinate.git"
+    "url": "git+https://github.com/cruna-cc/DS-protocol.git"
   },
   "author": {
     "name": "Francesco Sullo",
     "email": "francesco@sullo.co"
   },
   "bugs": {
-    "url": "https://github.com/ndujaLabs/erc721subordinate/issues"
+    "url": "https://github.com/cruna-cc/DS-protocol/issues"
   },
-  "homepage": "https://github.com/ndujaLabs/erc721subordinate#readme",
+  "homepage": "https://github.com/cruna-cc/DS-protocol#readme",
   "license": "MIT",
   "devDependencies": {
     "@ethersproject/contracts": "^5.7.0",
