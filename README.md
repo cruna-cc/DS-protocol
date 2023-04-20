@@ -348,7 +348,7 @@ EIP-3652 (https://ethereum-magicians.org/t/eip-3652-hierarchical-nft/6963) is ve
 
 [Everdragons2PFP](https://github.com/ndujaLabs/everdragons2-core/blob/VP/contracts/Everdragons2PFP.sol)
 
-[Cruna Protocol](https://github.com/cruna_cc/cruna-protocol)
+[Cruna Protocol](https://github.com/cruna-cc/cruna-protocol)
 
 Feel free to make a PR to add your contracts.
 
