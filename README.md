@@ -286,7 +286,7 @@ Install the dependencies like
 ``` 
 npm i @openzeppelin/contracts \
  @openzeppelin/contracts-upgradeable \
- @ndujalabs/erc721subordinate
+ @cruna/ds-protocol
 ```
 
 ## How it works
