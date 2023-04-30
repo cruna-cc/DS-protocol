@@ -354,6 +354,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**1.1.3**
+- fix missing `__ReentrancyGuard_init()` in `__ERC721Dominant_init`
+
 **1.1.2**
 - rename IERC721DefaultLockable to IERC721DefaultLocked 
 
