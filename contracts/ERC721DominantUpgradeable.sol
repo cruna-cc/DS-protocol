@@ -8,7 +8,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./interfaces/IERC721DominantUpgradeable.sol";
 import "./interfaces/IERC721SubordinateUpgradeable.sol";
 
-contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable, ERC721Upgradeable, ReentrancyGuardUpgradeable {
+abstract contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable, ERC721Upgradeable, ReentrancyGuardUpgradeable {
   error NotOwnedByDominant(address subordinate, address dominant);
   error NotASubordinate(address subordinate);
 
@@ -30,6 +30,12 @@ contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable,
   }
 
   function addSubordinate(address subordinate) public virtual {
+    // this MUST be called by the owner of the dominant token
+    // We do not use Ownable here to leave the implementor the option
+    // to use AccessControl or other approaches. The following should
+    // take care of it
+    _canAddSubordinate();
+    //
     if (ERC721Upgradeable(subordinate).supportsInterface(type(IERC721SubordinateUpgradeable).interfaceId) == false)
       revert NotASubordinate(subordinate);
 
@@ -38,6 +44,12 @@ contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable,
 
     _subordinates[_nextSubordinateId++] = subordinate;
   }
+
+  // _canAddSubordinate must be implemented by the contract that extends ERC721Dominant
+  // Example:
+  //   function _canAddSubordinate() internal override onlyOwner {}
+  //
+  function _canAddSubordinate() internal virtual;
 
   function subordinateByIndex(uint256 index) public virtual view returns (address) {
     return _subordinates[index];

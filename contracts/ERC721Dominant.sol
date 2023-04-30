@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./interfaces/IERC721Subordinate.sol";
 import "./interfaces/IERC721Dominant.sol";
 
-contract ERC721Dominant is IERC721Dominant, ERC721, ReentrancyGuard {
+abstract contract ERC721Dominant is IERC721Dominant, ERC721, ReentrancyGuard {
   error NotOwnedByDominant(address subordinate, address dominant);
   error NotASubordinate(address subordinate);
 
@@ -20,18 +20,21 @@ contract ERC721Dominant is IERC721Dominant, ERC721, ReentrancyGuard {
   function addSubordinate(address subordinate) public virtual {
     // this MUST be called by the owner of the dominant token
     // We do not use Ownable here to leave the implementor the option
-    // to use AccessControl or other approaches
-    // you can override it like, for example:
-    //
-    //    function addSubordinate(address subordinate) public onlyOwner {
-    //      super.addSubordinate(subordinate);
-    //    }
+    // to use AccessControl or other approaches. The following should
+    // take care of it
+    _canAddSubordinate();
     //
     if (ERC721(subordinate).supportsInterface(type(IERC721Subordinate).interfaceId) == false)
       revert NotASubordinate(subordinate);
     if (IERC721Subordinate(subordinate).dominantToken() != address(this)) revert NotOwnedByDominant(subordinate, address(this));
     _subordinates[_nextSubordinateId++] = subordinate;
   }
+
+  // _canAddSubordinate must be implemented by the contract that extends ERC721Dominant
+  // Example:
+  //   function _canAddSubordinate() internal override onlyOwner {}
+  //
+  function _canAddSubordinate() internal virtual;
 
   function subordinateByIndex(uint256 index) external virtual view returns (address) {
     return _subordinates[index];
