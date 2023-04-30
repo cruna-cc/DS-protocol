@@ -2,7 +2,6 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import "./interfaces/IERC721DefaultApprovable.sol";
@@ -12,21 +11,14 @@ contract ERC721BadgeUpgradeable is
   IERC721DefaultLockable,
   IERC721DefaultApprovable,
   Initializable,
-  ERC721Upgradeable,
-  OwnableUpgradeable
+  ERC721Upgradeable
 {
   error ApprovalNotAllowed();
   error TransferNotAllowed();
 
-  /// @custom:oz-upgrades-unsafe-allow constructor
-  constructor() {
-    _disableInitializers();
-  }
-
   // solhint-disable-next-line func-name-mixedcase
-  function __ERC721Badge_init(string memory name_, string memory symbol_) internal initializer {
+  function __ERC721Badge_init(string memory name_, string memory symbol_) internal onlyInitializing {
     __ERC721_init(name_, symbol_);
-    __Ownable_init();
     emit DefaultApprovable(false);
     emit DefaultLocked(true);
   }

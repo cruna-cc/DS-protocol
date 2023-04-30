@@ -15,13 +15,8 @@ abstract contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initi
   uint256 private _nextSubordinateId;
   mapping(uint256 => address) private _subordinates;
 
-  /// @custom:oz-upgrades-unsafe-allow constructor
-  constructor() {
-    _disableInitializers();
-  }
-
   // solhint-disable func-name-mixedcase
-  function __ERC721Dominant_init(string memory name, string memory symbol) internal initializer {
+  function __ERC721Dominant_init(string memory name, string memory symbol) internal onlyInitializing {
     __ERC721_init(name, symbol);
   }
 
