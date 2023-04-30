@@ -18,6 +18,7 @@ abstract contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initi
   // solhint-disable func-name-mixedcase
   function __ERC721Dominant_init(string memory name, string memory symbol) internal onlyInitializing {
     __ERC721_init(name, symbol);
+    __ReentrancyGuard_init();
   }
 
   function supportsInterface(bytes4 interfaceId) public view override(ERC721Upgradeable) virtual returns (bool) {
