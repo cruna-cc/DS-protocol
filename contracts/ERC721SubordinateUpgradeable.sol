@@ -38,7 +38,7 @@ contract ERC721SubordinateUpgradeable is IERC721SubordinateUpgradeable, ERC721Ba
     string memory name_,
     string memory symbol_,
     address dominant_
-  ) internal initializer {
+  ) internal onlyInitializing {
     __ERC721Badge_init(name_, symbol_);
     _dominant = IERC721Upgradeable(dominant_);
     // We do not check it is a dominant token to give the possibility to associate

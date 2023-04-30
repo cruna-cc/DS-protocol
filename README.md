@@ -354,6 +354,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**1.1.1**
+- better management of initializers
+
 **1.1.0**
 - adding the internal function `_canAddSubordinate` that must be implemented by the contract that extends the dominant, like `function _canAddSubordinate() internal override onlyOwner {}`
 
