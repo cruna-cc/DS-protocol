@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 // erc165 interfaceId 0xb45a3c0e
-interface IERC721DefaultLockable {
+interface IERC721DefaultLocked {
   // Must be emitted one time, when the contract is deployed,
   // defining the default status of any token that will be minted
   event DefaultLocked(bool locked);

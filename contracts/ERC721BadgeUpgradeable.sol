@@ -5,10 +5,10 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import "./interfaces/IERC721DefaultApprovable.sol";
-import "./interfaces/IERC721DefaultLockable.sol";
+import "./interfaces/IERC721DefaultLocked.sol";
 
 contract ERC721BadgeUpgradeable is
-  IERC721DefaultLockable,
+  IERC721DefaultLocked,
   IERC721DefaultApprovable,
   Initializable,
   ERC721Upgradeable
@@ -26,7 +26,7 @@ contract ERC721BadgeUpgradeable is
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
     return
       interfaceId == type(IERC721DefaultApprovable).interfaceId ||
-      interfaceId == type(IERC721DefaultLockable).interfaceId ||
+      interfaceId == type(IERC721DefaultLocked).interfaceId ||
       super.supportsInterface(interfaceId);
   }
 

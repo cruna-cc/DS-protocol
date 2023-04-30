@@ -189,14 +189,14 @@ interface IERC721DefaultApprovable {
 }
 ```
 
-### IERC721DefaultLockable
+### IERC721DefaultLocked
 
 ```solidity
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity ^0.8.0;
 
 // erc165 interfaceId 0xb45a3c0e
-interface IERC721DefaultLockable {
+interface IERC721DefaultLocked {
   // Must be emitted one time, when the contract is deployed,
   // defining the default status of any token that will be minted
   event DefaultLocked(bool locked);
@@ -212,7 +212,7 @@ interface IERC721DefaultLockable {
 
 ### ERC721Badge
 
-It implements the IERC721DefaultApprovable and the IERC721DefaultLockable interfaces.
+It implements the IERC721DefaultApprovable and the IERC721DefaultLocked interfaces.
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -221,9 +221,9 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 import "./IERC721DefaultApprovable.sol";
-import "./IERC721DefaultLockable.sol";
+import "./IERC721DefaultLocked.sol";
 
-contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721{
+contract ERC721Badge is IERC721DefaultLocked, IERC721DefaultApprovable, ERC721{
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {
     emit DefaultApprovable(false);
     emit DefaultLocked(true);
@@ -232,7 +232,7 @@ contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
     return
     interfaceId == type(IERC721DefaultApprovable).interfaceId ||
-    interfaceId == type(IERC721DefaultLockable).interfaceId ||
+    interfaceId == type(IERC721DefaultLocked).interfaceId ||
     super.supportsInterface(interfaceId);
   }
 
@@ -353,6 +353,9 @@ EIP-3652 (https://ethereum-magicians.org/t/eip-3652-hierarchical-nft/6963) is ve
 Feel free to make a PR to add your contracts.
 
 ## History
+
+**1.1.2**
+- rename IERC721DefaultLockable to IERC721DefaultLocked 
 
 **1.1.1**
 - better management of initializers
