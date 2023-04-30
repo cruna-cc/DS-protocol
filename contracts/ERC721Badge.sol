@@ -4,9 +4,9 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 import "./interfaces/IERC721DefaultApprovable.sol";
-import "./interfaces/IERC721DefaultLockable.sol";
+import "./interfaces/IERC721DefaultLocked.sol";
 
-contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721 {
+contract ERC721Badge is IERC721DefaultLocked, IERC721DefaultApprovable, ERC721 {
   error ApprovalNotAllowed();
   error TransferNotAllowed();
 
@@ -18,7 +18,7 @@ contract ERC721Badge is IERC721DefaultLockable, IERC721DefaultApprovable, ERC721
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
     return
       interfaceId == type(IERC721DefaultApprovable).interfaceId ||
-      interfaceId == type(IERC721DefaultLockable).interfaceId ||
+      interfaceId == type(IERC721DefaultLocked).interfaceId ||
       super.supportsInterface(interfaceId);
   }
 
