@@ -22,11 +22,11 @@ contract ERC721Badge is IERC721DefaultLocked, IERC721DefaultApprovable, ERC721 {
       super.supportsInterface(interfaceId);
   }
 
-  function approvable(uint256) external view returns (bool) {
+  function approvable(uint256) external pure returns (bool) {
     return false;
   }
 
-  function locked(uint256) external view returns (bool) {
+  function locked(uint256) external pure returns (bool) {
     return true;
   }
 
