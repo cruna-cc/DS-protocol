@@ -64,7 +64,7 @@ contract ERC721Subordinate is IERC721Subordinate, ERC721Badge {
   /**
    * @dev See {IERC721Subordinate}.
    */
-  function dominantToken() public view override returns (address) {
+  function dominantToken() public view virtual override returns (address) {
     return address(_dominant);
   }
 

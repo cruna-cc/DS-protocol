@@ -8,7 +8,12 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./interfaces/IERC721DominantUpgradeable.sol";
 import "./interfaces/IERC721SubordinateUpgradeable.sol";
 
-abstract contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initializable, ERC721Upgradeable, ReentrancyGuardUpgradeable {
+abstract contract ERC721DominantUpgradeable is
+  IERC721DominantUpgradeable,
+  Initializable,
+  ERC721Upgradeable,
+  ReentrancyGuardUpgradeable
+{
   error NotOwnedByDominant(address subordinate, address dominant);
   error NotASubordinate(address subordinate);
 
@@ -21,7 +26,7 @@ abstract contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initi
     __ReentrancyGuard_init();
   }
 
-  function supportsInterface(bytes4 interfaceId) public view override(ERC721Upgradeable) virtual returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Upgradeable) returns (bool) {
     return interfaceId == type(IERC721DominantUpgradeable).interfaceId || super.supportsInterface(interfaceId);
   }
 
@@ -47,12 +52,12 @@ abstract contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initi
   //
   function _canAddSubordinate() internal virtual;
 
-  function subordinateByIndex(uint256 index) public virtual view returns (address) {
+  function subordinateByIndex(uint256 index) public view virtual returns (address) {
     return _subordinates[index];
   }
 
-  function isSubordinate(address subordinate_) public virtual override view returns (bool) {
-    for (uint i = 0; i < _nextSubordinateId; i++) {
+  function isSubordinate(address subordinate_) public view virtual override returns (bool) {
+    for (uint256 i = 0; i < _nextSubordinateId; i++) {
       if (_subordinates[i] == subordinate_) {
         return true;
       }
@@ -60,7 +65,7 @@ abstract contract ERC721DominantUpgradeable is IERC721DominantUpgradeable, Initi
     return false;
   }
 
-  function countSubordinates() public view override returns (uint) {
+  function countSubordinates() public view virtual override returns (uint256) {
     return _nextSubordinateId;
   }
 

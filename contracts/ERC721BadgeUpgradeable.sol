@@ -7,12 +7,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./interfaces/IERC721DefaultApprovable.sol";
 import "./interfaces/IERC721DefaultLocked.sol";
 
-contract ERC721BadgeUpgradeable is
-  IERC721DefaultLocked,
-  IERC721DefaultApprovable,
-  Initializable,
-  ERC721Upgradeable
-{
+contract ERC721BadgeUpgradeable is IERC721DefaultLocked, IERC721DefaultApprovable, Initializable, ERC721Upgradeable {
   error ApprovalNotAllowed();
   error TransferNotAllowed();
 
@@ -30,11 +25,11 @@ contract ERC721BadgeUpgradeable is
       super.supportsInterface(interfaceId);
   }
 
-  function approvable(uint256) external pure virtual returns (bool) {
+  function approvable(uint256) external view virtual returns (bool) {
     return false;
   }
 
-  function locked(uint256) external pure virtual returns (bool) {
+  function locked(uint256) external view virtual returns (bool) {
     return true;
   }
 

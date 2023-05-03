@@ -62,7 +62,7 @@ contract ERC721SubordinateUpgradeable is IERC721SubordinateUpgradeable, ERC721Ba
   /**
    * @dev See {IERC721Subordinate}.
    */
-  function dominantToken() public view override returns (address) {
+  function dominantToken() public view virtual override returns (address) {
     return address(_dominant);
   }
 

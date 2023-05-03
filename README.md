@@ -354,6 +354,9 @@ Feel free to make a PR to add your contracts.
 
 ## History
 
+**1.1.4**
+- Adding missing `virtual` keywords in some functions
+
 **1.1.3**
 - fix missing `__ReentrancyGuard_init()` in `__ERC721Dominant_init`
 

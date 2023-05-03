@@ -15,5 +15,5 @@ interface IERC721DominantUpgradeable {
 
   function isSubordinate(address subordinate_) external view returns (bool);
 
-  function countSubordinates() external view returns (uint);
+  function countSubordinates() external view returns (uint256);
 }

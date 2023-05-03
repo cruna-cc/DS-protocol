@@ -36,12 +36,12 @@ abstract contract ERC721Dominant is IERC721Dominant, ERC721, ReentrancyGuard {
   //
   function _canAddSubordinate() internal virtual;
 
-  function subordinateByIndex(uint256 index) external virtual view returns (address) {
+  function subordinateByIndex(uint256 index) external view virtual returns (address) {
     return _subordinates[index];
   }
 
-  function isSubordinate(address subordinate_) public virtual override view returns (bool) {
-    for (uint i = 0; i < _nextSubordinateId; i++) {
+  function isSubordinate(address subordinate_) public view virtual override returns (bool) {
+    for (uint256 i = 0; i < _nextSubordinateId; i++) {
       if (_subordinates[i] == subordinate_) {
         return true;
       }
@@ -49,7 +49,7 @@ abstract contract ERC721Dominant is IERC721Dominant, ERC721, ReentrancyGuard {
     return false;
   }
 
-  function countSubordinates() public view override returns (uint) {
+  function countSubordinates() public view virtual override returns (uint256) {
     return _nextSubordinateId;
   }
 
