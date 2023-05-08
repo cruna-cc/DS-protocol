@@ -1,6 +1,6 @@
 # Cruna Dominant-Subordinate Protocol
 
-### This package was previously called @ndujaLabs/ERC721Subordinate
+### This package was previously called @ndujaLabs/ERC721Subordinate and recently has been integrated in @cruna/protocol (for improvements look at https://github.com/cruna-cc/cruna-protocol)
 
 A protocol to subordinate ERC721 contracts to a dominant contract so that the subordinate follows the ownership of the dominant, which can be even be an ERC721 contract that does not have any additional features.
 
